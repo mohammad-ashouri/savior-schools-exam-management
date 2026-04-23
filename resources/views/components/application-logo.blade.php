@@ -1,0 +1,1 @@
+<img src="/build/images/logo.svg" alt="logo"/>
