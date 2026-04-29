@@ -7,7 +7,7 @@
 
     <title>{{ env('PERSIAN_APP_NAME') . " | " . $title ?? env('APP_NAME') }}</title>
 
-    <link rel="icon" href="/build/assets/icons/favicon.ico" type="image/x-icon">
+{{--    <link rel="icon" href="/build/assets/icons/favicon.ico" type="image/x-icon">--}}
 
     <!-- Scripts -->
     <link rel="stylesheet" href="/build/plugins/tagify/tagify.css">

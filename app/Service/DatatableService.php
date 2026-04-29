@@ -15,7 +15,7 @@ class DatatableService
     public static function setConfigures($datatable_component): void
     {
         $datatable_component->setPrimaryKey('id');
-        $datatable_component->setSearchPlaceholder('جستجو در تمام جدول (حساس به حروف بزرگ و کوچک)');
+        $datatable_component->setSearchPlaceholder('Search the entire table');
         $datatable_component->setSearchDebounce(1000);
         $datatable_component->setDefaultSort('created_at', 'desc');
     }

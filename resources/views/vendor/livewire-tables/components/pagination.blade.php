@@ -9,7 +9,7 @@
 <div {{ $this->getPaginationWrapperAttributesBag() }}>
     @if ($this->paginationVisibilityIsEnabled())
         @if ($isTailwind)
-            <div dir="ltr" class="mt-4 px-4 md:p-0 sm:flex justify-between items-center space-y-4 sm:space-y-0">
+            <div class="mt-4 px-4 md:p-0 sm:flex justify-between items-center space-y-4 sm:space-y-0">
                 <div>
                     @if ($this->paginationIsEnabled && $this->isPaginationMethod('standard') && $currentRows->lastPage() > 1 && $this->showPaginationDetails)
                         <p class="paged-pagination-results text-sm text-gray-700 leading-5 dark:text-white">

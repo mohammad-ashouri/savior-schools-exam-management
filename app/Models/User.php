@@ -72,4 +72,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(GeneralInformation::class, 'id', 'user_id');
     }
+
+    public function getEnglishFullnameAttribute(): string
+    {
+        return $this->generalInformation->first_name_en . " " . $this->generalInformation->last_name_en;
+    }
+
+    public function getFarsiFullnameAttribute(): string
+    {
+        return $this->generalInformation->first_name_fa . " " . $this->generalInformation->last_name_fa;
+    }
 }

@@ -1,13 +1,16 @@
-@php use App\Models\Catalogs\Field; @endphp
 @props([
-    'messages',
-    'model_name'=>null
+    'model' => null,
+    'messages' => null,
 ])
 
-@if ($messages)
+@php
+    $errorsList = $messages ?? ($model ? $errors->get($model) : []);
+@endphp
+
+@if (!empty($errorsList))
     <ul {{ $attributes->merge(['class' => 'text-sm text-red-600 dark:text-red-400 space-y-1']) }}>
-        @foreach ((array) $messages as $message)
-            <li>{{ __(processValidationMessageForDynamicFields($message, $model_name ?? null)) }}</li>
+        @foreach ((array) $errorsList as $message)
+            <li>{{ $message }}</li>
         @endforeach
     </ul>
 @endif

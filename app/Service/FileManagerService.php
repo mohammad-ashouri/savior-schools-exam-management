@@ -8,7 +8,16 @@ use Illuminate\Support\Facades\Storage;
 
 class FileManagerService
 {
-    public static function saveFile($file, $folder, $post_id, $model, $file_type): void
+    /**
+     * Save file in database
+     * @param $file
+     * @param $folder
+     * @param $post_id
+     * @param $model
+     * @param $file_type
+     * @return File
+     */
+    public static function saveFile($file, $folder, $post_id, $model, $file_type): File
     {
         $extension = $file->getClientOriginalExtension();
         $fileName = uniqid() . Carbon::now()->format('s-i-H-d-m-Y') . '.' . $extension;
@@ -19,7 +28,7 @@ class FileManagerService
         );
         $main_image_url = Storage::url($main_image);
 
-        File::create([
+        return File::create([
             'type' => $file_type,
             'model' => $model,
             'model_id' => $post_id,

@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Tables;
 
+use App\Models\Management\Classroom;
+use App\Models\Management\Course;
 use App\Service\DatatableService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -15,9 +18,9 @@ use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class UsersTable extends DataTableComponent
+class ClassroomsTable extends DataTableComponent
 {
-    protected $model = User::class;
+    protected $model = Classroom::class;
 
     public function configure(): void
     {
@@ -27,39 +30,41 @@ class UsersTable extends DataTableComponent
 
     protected $listeners = ['refreshTable' => '$refresh'];
 
+    public function builder(): Builder
+    {
+        return Classroom::query()
+            ->with(['courses'])
+            ->orderByDesc('id');
+    }
+
     public function columns(): array
     {
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("نام", "name")
-                ->sortable()
-                ->searchable(),
-            Column::make("شماره همراه", "mobile")
-                ->sortable()
-                ->searchable(),
-            Column::make("نقش")
-                ->sortable()
+            Column::make("Academic Year", "academicYearInfo.name")
                 ->searchable()
-                ->label(function ($model) {
-                    return $model->rolesNames;
-                }),
-            Column::make('وضعیت', "status")
-                ->format(function ($value, $row) {
-                    return view('components.table.toggle', [
-                        'checked' => (bool)$value,
-                        'id' => $row->id,
-                    ]);
-                })
-                ->html()
                 ->sortable(),
-            Column::make('عملیات')
+            Column::make("Name", "name")
+                ->searchable()
+                ->sortable(),
+            Column::make("Courses")
+                ->label(function ($row) {
+                    $classroom_courses = $row->courses
+                        ->map(function ($query) {
+                            return $query->courseInfo->name . " (" . $query->teacherInfo->english_fullname . ")";
+                        });
+                    return $classroom_courses->implode(', ');
+                })
+                ->searchable()
+                ->sortable(),
+            Column::make('Operations')
                 ->label(fn($row) => view('components.table.actions', [
                     'row' => $row,
                     'buttons' => [
-                        'edit',
+                        'courses',
                     ],
-                    'route' => route('users.edit', $row->id),
+                    'courses_route_name' => route('management.courses.index', ['classroom_id' => $row->id]),
                 ]))
                 ->html(),
         ];
@@ -68,25 +73,25 @@ class UsersTable extends DataTableComponent
     public function filters(): array
     {
         return [
-            MultiSelectFilter::make('نقش')
-                ->options(Role::pluck('name', 'id')->toArray())
-                ->filter(function ($query, $value) {
-                    if (!empty($value)) {
-                        $role_names = Role::whereIn('id', $value)->pluck('name')->toArray();
-                        $query->role($role_names);
-                    }
-                }),
-            SelectFilter::make('وضعیت')
-                ->options([
-                    '' => 'همه',
-                    true => 'فعال',
-                    false => 'غیرفعال',
-                ])
-                ->filter(function ($query, $value) {
-                    if (!empty($value)) {
-                        $query->where('status', $value);
-                    }
-                }),
+//            MultiSelectFilter::make('نقش')
+//                ->options(Role::pluck('name', 'id')->toArray())
+//                ->filter(function ($query, $value) {
+//                    if (!empty($value)) {
+//                        $role_names = Role::whereIn('id', $value)->pluck('name')->toArray();
+//                        $query->role($role_names);
+//                    }
+//                }),
+//            SelectFilter::make('وضعیت')
+//                ->options([
+//                    '' => 'همه',
+//                    true => 'فعال',
+//                    false => 'غیرفعال',
+//                ])
+//                ->filter(function ($query, $value) {
+//                    if (!empty($value)) {
+//                        $query->where('status', $value);
+//                    }
+//                }),
         ];
     }
 

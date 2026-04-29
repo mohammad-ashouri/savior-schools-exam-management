@@ -4,20 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('sub_question_options', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('type');
-            $table->string('model')->nullable();
-            $table->integer('model_id')->nullable();
-            $table->string('src');
-            $table->boolean('status')->default(true)->after('src');
+            $table->unsignedBigInteger('sub_question_id');
+            $table->foreign('sub_question_id')->references('id')->on('sub_questions');
+            $table->text('option');
+            $table->boolean('correct')->default(false);
             $table->unsignedBigInteger('adder')->nullable();
             $table->unsignedBigInteger('editor')->nullable();
             $table->timestamps();
@@ -30,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('sub_question_options');
     }
 };

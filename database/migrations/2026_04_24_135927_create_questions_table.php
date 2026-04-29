@@ -10,14 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('type');
-            $table->string('model')->nullable();
-            $table->integer('model_id')->nullable();
-            $table->string('src');
-            $table->boolean('status')->default(true)->after('src');
+            $table->unsignedBigInteger('classroom_course_id');
+            $table->string('question_type');
+            $table->text('title');
+            $table->enum('term', ['first', 'second', 'retake']);
             $table->unsignedBigInteger('adder')->nullable();
             $table->unsignedBigInteger('editor')->nullable();
             $table->timestamps();
@@ -30,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('questions');
     }
 };
