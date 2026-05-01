@@ -5,4 +5,5 @@ return [
     App\Providers\TelescopeServiceProvider::class,
     App\Providers\VoltServiceProvider::class,
     Pawlox\VideoThumbnail\VideoThumbnailServiceProvider::class,
+    Stimulsoft\Laravel\StiServiceProvider::class
 ];

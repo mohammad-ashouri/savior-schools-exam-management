@@ -81,7 +81,9 @@
                 <x-management.questions.multiple-choice-form/>
             </div>
             <div class="flex items-center justify-end gap-2 p-4">
-                <x-secondary-button type="button" x-on:click="$dispatch('close-modal','create');$wire.set('question_form.question_type', null);">Close
+                <x-secondary-button type="button"
+                                    x-on:click="$dispatch('close-modal','create');$wire.set('question_form.question_type', null);">
+                    Close
                 </x-secondary-button>
                 <x-primary-button wire:loading.remove type="submit">Create</x-primary-button>
                 <span wire:loading class="text-gray-500">Processing...</span>
@@ -96,6 +98,13 @@
             >
                 New Question
             </x-success-button>
+            <a
+                    href="/report?report_type=ExamPaper&classroom_course={{ $this->classroom_course->id }}&term={{ $this->term }}">
+                <x-secondary-button
+                >
+                    Get Exam Paper
+                </x-secondary-button>
+            </a>
         </div>
     </header>
 

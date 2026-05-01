@@ -12,6 +12,7 @@
         "james-heinrich/getid3": "^1.9",
         "jantinnerezo/livewire-alert": "^4.0",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.15",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.4",
@@ -25,6 +26,8 @@
         "spatie/laravel-permission": "^6.18",
         "spatie/laravel-tags": "^4.10",
         "spatie/livewire-filepond": "^1.4",
+        "stimulsoft/dashboards-php": "^2026.2",
+        "stimulsoft/reports-php": "^2026.2",
         "tinymce/tinymce": "^7.7"
     },
     "require-dev": {
