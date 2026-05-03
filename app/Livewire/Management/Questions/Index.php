@@ -4,6 +4,7 @@ namespace App\Livewire\Management\Questions;
 
 use App\Livewire\Forms\Management\QuestionForm;
 use App\Models\Management\ClassroomCourse;
+use App\Models\Management\ExamInfo;
 use App\Models\Management\Question;
 use App\Service\ExamService;
 use App\Service\FileManagerService;
@@ -23,6 +24,8 @@ class Index extends Component
 
     public string $term_title;
 
+    public $no_of_questions;
+
     /**
      * Mount the component
      * @param int $classroom_id
@@ -35,6 +38,27 @@ class Index extends Component
         abort_unless(in_array($term, ['first', 'second', 'retake']), 403);
 
         $this->classroom_course = ClassroomCourse::where('status', 1)->where('id', $classroom_course_id)->firstOrFail();
+
+        $this->no_of_questions = ExamService::getNoOfQuestions($this->classroom_course->id, $this->term);
+    }
+
+    /**
+     * Set number of questions in exam
+     * @return void
+     */
+    public function setNoOfQuestions(): void
+    {
+        $this->validate(['no_of_questions' => 'required|integer|min:10']);
+        ExamInfo::updateOrCreate([
+            'classroom_course_id' => $this->classroom_course->id,
+            'term' => $this->term,
+            'type' => 'number_of_questions',
+        ], [
+            'value' => $this->no_of_questions,
+            'user' => auth()->user()->id
+        ]);
+
+        $this->dispatch('show-notification', 'success-notification');
     }
 
     /**

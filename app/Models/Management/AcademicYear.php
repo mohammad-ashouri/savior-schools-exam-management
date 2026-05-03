@@ -2,6 +2,7 @@
 
 namespace App\Models\Management;
 
+use App\Models\Management\School;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,11 @@ class AcademicYear extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function schoolInfo(): BelongsTo
+    {
+        return $this->belongsTo(School::class, 'school_id', 'id');
+    }
 
     public function adderInfo(): BelongsTo
     {

@@ -99,7 +99,8 @@
                 New Question
             </x-success-button>
             <a
-                    href="/report?report_type=ExamPaper&classroom_course={{ $this->classroom_course->id }}&term={{ $this->term }}">
+                    target="_blank"
+                    href="{{ route('report.exam-paper',['classroom_course_id' => $this->classroom_course->id,'term'=>$this->term]) }}">
                 <x-secondary-button
                 >
                     Get Exam Paper
@@ -107,6 +108,26 @@
             </a>
         </div>
     </header>
+
+    <div class="py-3 gap-y-1">
+        <div class=" mx-auto sm:px-6 lg:px-6">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="mt-4 space-y-1">
+                        <x-input-label>No. of questions in exam</x-input-label>
+                        <div class="flex items-center gap-2">
+                            <x-text-input
+                                    wire:change.debounce="setNoOfQuestions"
+                                    placeholder="min: 10"
+                                    wire:model="no_of_questions"/>
+                            <x-spinners.ring-resize text="Saving..."/>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('no_of_questions')"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="py-3 gap-y-1">
         <div class=" mx-auto sm:px-6 lg:px-6">

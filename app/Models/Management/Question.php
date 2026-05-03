@@ -11,6 +11,7 @@ class Question extends Model
 {
     use SoftDeletes;
 
+    protected $connection = "pgsql";
     protected $table = "questions";
     protected $fillable = [
         'id',

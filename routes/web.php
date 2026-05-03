@@ -9,6 +9,7 @@ use App\Livewire\Management\Questions\Index as ManagementQuestionsIndex;
 use App\Livewire\Management\Questions\Create as ManagementQuestionsCreate;
 use App\Livewire\Management\Questions\ManageQuestions\MultipartQuestionSubQuestions as ManageSubQuestionsMultipartQuestion;
 use App\Livewire\Exams\Index as ExamIndex;
+use App\Livewire\Reports\Types\ExamPaper;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -30,8 +31,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
-    Route::get('/report', [ReportController::class, 'index'])->name('report');
-
+    Route::get('/report', [ReportController::class, 'test'])->name('report');
+    Route::prefix('report')->group(function () {
+        Route::get('exam-paper/{classroom_course_id}/{term}', [ReportController::class,'getExamPaper'])->name('report.exam-paper');
+    });
 });
 
 require __DIR__ . '/auth.php';

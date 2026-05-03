@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Management\ExamInfo;
 use App\Models\Management\Option;
 use App\Models\Management\Question;
 use App\Models\Management\SubQuestion;
@@ -103,5 +104,21 @@ class ExamService
             'correct' => $correct_answer,
             'adder' => auth()->user()->id,
         ]);
+    }
+
+    /**
+     * Get number of questions in exam
+     * @param $classroom_course_id
+     * @param $term
+     * @return int|null
+     */
+    public static function getNoOfQuestions($classroom_course_id, $term): ?int
+    {
+        $exam_info=ExamInfo::where('classroom_course_id', $classroom_course_id)
+            ->where('term', $term)
+            ->where('type', 'number_of_questions')
+            ->first();
+
+        return !empty($exam_info) ? (int)$exam_info->value : null;
     }
 }

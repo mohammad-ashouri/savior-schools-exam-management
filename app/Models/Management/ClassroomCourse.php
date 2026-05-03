@@ -2,6 +2,7 @@
 
 namespace App\Models\Management;
 
+use App\Livewire\Forms\Management\QuestionForm;
 use App\Models\Management\Course;
 use App\Models\Management\Classroom;
 use App\Models\User;
@@ -40,6 +41,11 @@ class ClassroomCourse extends Model
     public function teacherInfo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function questions($term)
+    {
+        return $this->hasMany(Question::class, 'classroom_course_id')->where('term', $term);
     }
 
     public function adderInfo(): BelongsTo

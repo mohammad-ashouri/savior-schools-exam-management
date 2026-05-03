@@ -1,8 +1,9 @@
 @props([
-    'target'=>null
+    'target'=>null,
+    'text'=>null,
 ])
-<div wire:loading @if($target) wire:target="{{ $target }}" @endif>
-    <svg width="24" height="24" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<div class="flex gap-2" wire:loading @if($target) wire:target="{{ $target }}" @endif>
+    <svg width="24" height="24" stroke="#1e3a8a" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <style>.spinner_V8m1 {
                 transform-origin: center;
                 animation: spinner_zKoa 2s linear infinite
@@ -37,4 +38,5 @@
             <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
         </g>
     </svg>
+    {{ $text }}
 </div>
