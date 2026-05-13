@@ -5,6 +5,7 @@ namespace App\Livewire\Management\Questions;
 use App\Livewire\Forms\Management\QuestionForm;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\ExamInfo;
+use App\Models\Management\Option;
 use App\Models\Management\Question;
 use App\Service\ExamService;
 use App\Service\FileManagerService;
@@ -25,6 +26,41 @@ class Index extends Component
     public string $term_title;
 
     public $no_of_questions;
+
+    public $selected_question_id;
+
+    protected $listeners = [
+        'resetFields',
+        'set-selected-id' => 'setSelectedId',
+    ];
+
+    /**
+     * Set selected question id after dispatched event
+     * @param $id
+     * @return void
+     */
+    public function setSelectedId($id): void
+    {
+        $this->selected_question_id = $id;
+    }
+
+    /**
+     * Reset fields after dispatch event
+     * @return void
+     */
+    public function resetFields(): void
+    {
+        $this->reset(
+            'question_form.question_type',
+            'question_form.title',
+            'question_form.image',
+            'question_form.option1',
+            'question_form.option2',
+            'question_form.option3',
+            'question_form.option4',
+            'question_form.correct_answer',
+        );
+    }
 
     /**
      * Mount the component
@@ -98,6 +134,20 @@ class Index extends Component
         $this->dispatch('close-modal', 'create');
         $this->dispatch('show-notification', 'success-notification');
         $this->dispatch('refreshTable');
+        $this->dispatch('clear-tinymce');
+    }
+
+    /**
+     * Delete question
+     * @return void
+     */
+    public function deleteQuestion(): void
+    {
+        Question::findOrFail($this->selected_question_id)->delete();
+        Option::where('question_id', $this->selected_question_id)->delete();
+        $this->dispatch('refreshTable');
+        $this->dispatch('close-modal', 'confirm-delete');
+        $this->dispatch('show-notification', 'success-notification');
     }
 
     /**

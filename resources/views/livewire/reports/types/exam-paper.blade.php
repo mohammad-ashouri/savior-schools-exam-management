@@ -190,7 +190,7 @@
 
         .passage-box {
             font-family: inherit;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .multi-part-question .question-row:first-of-type {
@@ -201,6 +201,50 @@
         .multi-part-question .q-num {
             font-weight: 600;
             color: #2c6e2c;
+        }
+
+        .q-title {
+            margin-bottom: 6px;
+        }
+
+        .q-options {
+            margin-top: 6px;
+            padding-right: 10px;
+        }
+
+        .option {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .q-title img {
+            page-break-inside: avoid;
+            max-width: 100%;
+        }
+
+        .q-title img {
+            display: block;
+            margin: 4px 0;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .q-title p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .q-title {
+            line-height: 1.4;
+        }
+
+        .q-title br {
+            line-height: 0;
+        }
+
+        .q-title > * {
+            margin-top: 0;
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -242,217 +286,73 @@
     </div>
 
     <div style="margin-top: 24px;">
-        <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;">
-            <span class="section-badge"> Section A : Multiple Choice (60 Marks)</span>
-            <span class="mcq-note"> Pick the best answer, honey! </span>
-        </div>
 
-        <div class="marks-header">
-            <div>Sec/Q#</div>
-            <div>Questions</div>
-            <div>Marks</div>
-        </div>
 
-        <div class="question-row">
-            <div class="q-num">1.</div>
-            <div class="q-text">You're about to send a "nasty" text to a friend because you're mad. <strong>Self-restraint</strong>
-                means:<br> a) Sending it and deleting it later<br> b) Counting to ten and putting the phone away,
-                because you are more mature than that. But if there is a problem to be resolved, you'll make the time to
-                have an actual conversation about it with her.<br> c) Asking your sister to press the send button while
-                you hide in a corner.<br> d) Sending it but adding a "lol" at the end just to see how she reacts.
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">2.</div>
-            <div class="q-text">Your teacher looks extra tired today. The best way to show <strong>Compassion</strong>
-                is:<br> a) Asking for less homework<br> b) Being an extra good listener and helpful in class<br> c)
-                Telling her she looks awful!<br> d) Whispering to your classmate throughout the session and making her
-                even more overstimulated.
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
-        <div class="question-row">
-            <div class="q-num">3.</div>
-            <div class="q-text">You see a "perfect" girl on Instagram and feel sad about your own life. You should:<br>
-                a) Remember that social media is not real and that you don't have to compare yourself with anyone.<br>
-                b) Comment something mean on her photo.<br> c) Try to copy her exact outfits and style.<br> d) Spend 5
-                hours scrolling so your brain would go numb and you would feel better
-            </div>
-            <div class="q-marks">1</div>
-        </div>
+        @foreach($questions as $question)
+            @switch($question['question_type'])
+                @case('multiple_choice')
+                    <div class="marks-header">
+                        <div>Sec/Q#</div>
+                        <div>Questions</div>
+                    </div>
+                    <div class="question-row">
+                        <div class="q-num">{{ $loop->iteration }}</div>
 
+                        <div class="q-text">
+                            <div class="q-title">
+                                @if(str_contains($question['title'], '<img'))
+                                    {!! $question['title'] !!}
+                                @else
+                                    {!! strip_tags($question['title']) !!}
+                                @endif
+                            </div>
+
+                            <div class="q-options">
+                                @foreach($question['options'] as $option)
+                                    <div class="option">
+                                        {{ $loop->iteration }}) {!! strip_tags($option) !!}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    @break
+                @case('multipart_question')
+                    <div class="multi-part-question" style="page-break-inside: avoid;">
+                        <!-- Main text / passage -->
+                        <div class="passage-box"
+                             style="background: #f9f7f0; padding: 16px; border-radius: 12px; border-left: 5px solid #2c6e2c; margin-bottom: 16px;">
+                            {!! $question['title'] !!}
+                        </div>
+
+                        <!-- Sub-questions (each behaves like a normal question-row) -->
+                        @foreach($question['sub_questions'] as $sub_question)
+                            <div class="question-row">
+                                <div class="q-num">{{ $loop->iteration }}</div>
+                                <div class="q-text">
+                                    <div class="q-title">
+                                        @if(str_contains($sub_question['question'], '<img'))
+                                            {!! $sub_question['question'] !!}
+                                        @else
+                                            {!! strip_tags($sub_question['question']) !!}
+                                        @endif
+                                    </div>
+
+                                    <div class="q-options">
+                                        @foreach($sub_question['options'] as $option)
+                                            <div class="option">
+                                                {{ $loop->iteration }}) {!! strip_tags($option) !!}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    @break
+            @endswitch
+        @endforeach
         <!-- Multi-part question: passage with sub-questions -->
-        <div class="multi-part-question" style="margin-top: 24px; page-break-inside: avoid;">
-            <!-- Main text / passage -->
-            <div class="passage-box" style="background: #f9f7f0; padding: 16px; border-radius: 12px; border-left: 5px solid #2c6e2c; margin-bottom: 16px;">
-                <p style="font-weight: bold; margin-bottom: 8px;">📖 Read the following situation carefully:</p>
-                <p style="font-size: 0.95rem; line-height: 1.5;">“Sara and Lina are best friends. One day, Sara accidentally breaks Lina’s favorite pen. Lina gets very angry and stops talking to Sara. Later, Lina feels guilty and wants to fix the friendship.”</p>
-            </div>
-
-            <!-- Sub-questions (each behaves like a normal question-row) -->
-            <div class="question-row">
-                <div class="q-num">1.1</div>
-                <div class="q-text">What is the FIRST thing Lina should do to show <strong>good Akhlaq</strong>?<br>
-                    a) Buy Sara a new pen and ignore her.<br>
-                    b) Apologize sincerely without excuses.<br>
-                    c) Wait for Sara to say sorry first.<br>
-                    d) Tell other friends what Sara did.
-                </div>
-                <div class="q-marks">1</div>
-            </div>
-
-            <div class="question-row">
-                <div class="q-num">1.2</div>
-                <div class="q-text">Which <strong>self‑restraint</strong> tip would help Lina control her anger?<br>
-                    a) Yell at Sara right away.<br>
-                    b) Take deep breaths and walk away before speaking.<br>
-                    c) Break one of Sara’s things to make it even.<br>
-                    d) Send an angry text message.
-                </div>
-                <div class="q-marks">1</div>
-            </div>
-
-            <div class="question-row">
-                <div class="q-num">1.3</div>
-                <div class="q-text">What Islamic value does this situation teach us?<br>
-                    a) Revenge is the best solution.<br>
-                    b) Forgiveness and compassion are signs of strength.<br>
-                    c) Friendship ends after a mistake.<br>
-                    d) Never lend your belongings to anyone.
-                </div>
-                <div class="q-marks">1</div>
-            </div>
-
-            <div class="question-row">
-                <div class="q-num">1.4</div>
-                <div class="q-text">How can Lina show <strong>honor (Izzah)</strong> in this situation?<br>
-                    a) Humiliate Sara in front of the class.<br>
-                    b) Admit her mistake and make things right without lowering her dignity.<br>
-                    c) Ignore Sara forever.<br>
-                    d) Cry and blame herself.
-                </div>
-                <div class="q-marks">1</div>
-            </div>
-        </div>
-        <!-- جمع‌بندی نمرات -->
         <div style="text-align: right; font-weight: bold; margin-top: 16px; padding: 8px 12px; background: #f1f5f9; border-radius: 12px;">
             Total Marks: 60 (All questions carry 1 mark each)
         </div>

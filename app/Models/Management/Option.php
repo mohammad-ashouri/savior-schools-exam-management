@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Option extends Model
 {
-//    use SoftDeletes;
+    use SoftDeletes;
     protected $table = "options";
     protected $fillable = [
         'id',

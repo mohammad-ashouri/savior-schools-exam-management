@@ -114,7 +114,7 @@ class ExamService
      */
     public static function getNoOfQuestions($classroom_course_id, $term): ?int
     {
-        $exam_info=ExamInfo::where('classroom_course_id', $classroom_course_id)
+        $exam_info = ExamInfo::where('classroom_course_id', $classroom_course_id)
             ->where('term', $term)
             ->where('type', 'number_of_questions')
             ->first();

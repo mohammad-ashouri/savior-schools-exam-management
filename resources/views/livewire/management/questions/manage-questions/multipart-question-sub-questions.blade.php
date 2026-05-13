@@ -54,14 +54,14 @@
                         <x-input-error class="mt-2" :messages="$errors->get('question_form.title')"/>
                     </div>
                     <div class="mt-4 space-y-1">
-                        <x-input-label>Attachment Image</x-input-label>
-                        <x-filepond::upload wire:model="question_form.image"
-                                            :allowMultiple="false"
-                                            :instantUpload="true"
-                                            server-headers='@json(["X-CSRF-TOKEN" => csrf_token()])'
-                                            :chunkSize="2000000"
-                                            :accept="'image/jpg,image/png,image/jpeg,image.bmp'"/>
-                        <x-input-error class="mt-2" :messages="$errors->get('question_form.image')"/>
+{{--                        <x-input-label>Attachment Image</x-input-label>--}}
+{{--                        <x-filepond::upload wire:model="question_form.image"--}}
+{{--                                            :allowMultiple="false"--}}
+{{--                                            :instantUpload="true"--}}
+{{--                                            server-headers='@json(["X-CSRF-TOKEN" => csrf_token()])'--}}
+{{--                                            :chunkSize="2000000"--}}
+{{--                                            :accept="'image/jpg,image/png,image/jpeg,image.bmp'"/>--}}
+{{--                        <x-input-error class="mt-2" :messages="$errors->get('question_form.image')"/>--}}
 
                         <div x-transition x-show="question_type=='multiple_choice'"
                              class="grid grid-cols-1 gap-2 mt-4 space-y-1">
@@ -114,52 +114,94 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('livewire:initialized', function () {
-                // Function to sync TinyMCE content with Livewire
-                function syncTinyMCEWithLivewire() {
-                    const editors = [
-                        {editorId: 'title-editor', inputId: 'title-editor-input'},
-                    ];
+    <script>
+        function initTinyMCE() {
 
-                    editors.forEach(({editorId, inputId}) => {
-                        const editor = tinymce.get(editorId);
-                        const input = document.getElementById(inputId);
+            if (!window.tinymce) return;
 
-                        if (editor && input) {
-                            // Set initial content from Livewire model to editor
-                            if (input.value) {
-                                editor.setContent(input.value);
-                            }
+            // جلوگیری از duplicate init
+            tinymce.remove('.tinymce-editor');
 
-                            // Update hidden input when editor content changes
-                            editor.on('Change input Undo Redo', function () {
-                                const content = editor.getContent();
-                                input.value = content;
-                                input.dispatchEvent(new Event('input'));
-                            });
+            tinymce.init({
+                selector: '.tinymce-editor',
 
-                            // Listen for Livewire updates to sync back to editor
-                            Livewire.on('updateTinyMCE', ({id, content}) => {
-                                if (id === editorId && editor) {
-                                    editor.setContent(content || '');
-                                }
-                            });
+                plugins: 'code table lists link autolink autosave image media preview save wordcount fullscreen searchreplace visualblocks visualchars nonbreaking pagebreak charmap anchor insertdatetime advlist help',
+
+                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code',
+
+                paste_as_text: true,
+
+                paste_preprocess: function(plugin, args) {
+                    args.content = args.content.replace(/<table[\s\S]*?<\/table>/gi, '');
+
+                    args.content = args.content.replace(/<\/?(tr|td|tbody|thead)[^>]*>/gi, '');
+                },
+                setup: function (editor) {
+
+                    editor.on('init', function () {
+
+                        const input =
+                            document.getElementById(editor.id + '-input');
+
+                        if (input) {
+                            editor.setContent(input.value || '');
+                        }
+                    });
+
+                    editor.on('change keyup', function () {
+
+                        const input =
+                            document.getElementById(editor.id + '-input');
+
+                        if (input) {
+
+                            input.value = editor.getContent();
+
+                            input.dispatchEvent(
+                                new Event('input', { bubbles: true })
+                            );
                         }
                     });
                 }
-
-                // Initialize sync when TinyMCE is ready
-                if (window.tinymce) {
-                    tinymce.on('AddEditor', function (e) {
-                        e.editor.on('init', function () {
-                            syncTinyMCEWithLivewire();
-                        });
-                    });
-                }
             });
-        </script>
-    @endpush
+        }
+
+        document.addEventListener('livewire:init', () => {
+
+            initTinyMCE();
+
+            // بعد از هر رندر لایووایر
+            Livewire.hook('morphed', () => {
+
+                setTimeout(() => {
+                    initTinyMCE();
+                }, 50);
+            });
+
+            // پاک کردن editor ها
+            Livewire.on('clear-tinymce', () => {
+
+                tinymce.editors.forEach(editor => {
+
+                    if (!editor || editor.removed) return;
+
+                    // فقط این کار
+                    editor.setContent('');
+
+                    const input =
+                        document.getElementById(editor.id + '-input');
+
+                    if (input) {
+
+                        input.value = '';
+
+                        input.dispatchEvent(
+                            new Event('input', { bubbles: true })
+                        );
+                    }
+                });
+            });
+        });
+    </script>
 
 </div>

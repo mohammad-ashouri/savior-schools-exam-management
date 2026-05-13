@@ -1,5 +1,8 @@
 <div>
     @foreach($options as $option)
-        {!! $option !!} {{ !$loop->last ? "\n" : null }}
+        <div>
+            <span>{{ $loop->iteration }}-</span>
+            <span>{!! strip_tags($option) !!}</span>
+        </div>
     @endforeach
 </div>

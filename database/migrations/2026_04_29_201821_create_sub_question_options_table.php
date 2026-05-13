@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sub_question_options', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sub_question_id');
-            $table->foreign('sub_question_id')->references('id')->on('sub_questions');
+            $table->foreign('sub_question_id')->references('id')->on('sub_questions')->onDelete('cascade');
             $table->text('option');
             $table->boolean('correct')->default(false);
             $table->unsignedBigInteger('adder')->nullable();

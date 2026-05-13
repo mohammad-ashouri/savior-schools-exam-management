@@ -12,38 +12,36 @@
     <script>
         // Function to initialize TinyMCE
         function initTinyMCE() {
+            // Initialize TinyMCE
             if (window.tinymce) {
                 tinymce.init({
                     selector: '.tinymce-editor',
                     language: 'en',
-                    skin: "oxide",
+                    plugins: 'code table lists link autolink autosave image media preview save wordcount fullscreen searchreplace visualblocks visualchars nonbreaking pagebreak charmap anchor insertdatetime advlist help',
+                    toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview media | ltr rtl | code | advcode | advtable | template',
+                    paste_as_text: true,
 
-                    plugins: 'code table lists link autolink autosave preview save wordcount fullscreen searchreplace visualblocks visualchars nonbreaking pagebreak charmap anchor insertdatetime advlist help',
+                    paste_preprocess: function(plugin, args) {
+                        args.content = args.content.replace(/<table[\s\S]*?<\/table>/gi, '');
 
-                    toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen preview | ltr rtl | code',
-
-                    paste_data_images: false,
-
-                    valid_elements: 'p,br,b,strong,i,em,u,ul,ol,li,span,h1,h2,h3,h4,h5,h6',
-
-                    invalid_elements: 'img,iframe,video,audio,object,embed,source',
-
-                    forced_root_block: 'p',
-
+                        args.content = args.content.replace(/<\/?(tr|td|tbody|thead)[^>]*>/gi, '');
+                    },
                     setup: function (editor) {
                         editor.on('change keyup', function () {
+                            // Get the editor ID
                             const editorId = editor.id;
+                            // Get the corresponding hidden input ID
                             const inputId = editorId + '-input';
-
+                            // Update the hidden input value
                             document.getElementById(inputId).value = editor.getContent();
-                            document.getElementById(inputId).dispatchEvent(
-                                new Event('input', { bubbles: true })
-                            );
+                            // Dispatch an input event to trigger Livewire updates
+                            document.getElementById(inputId).dispatchEvent(new Event('input', {bubbles: true}));
                         });
                     }
                 });
             }
         }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             initTinyMCE();

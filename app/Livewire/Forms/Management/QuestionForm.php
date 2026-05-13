@@ -13,7 +13,7 @@ class QuestionForm extends Form
     public $question_type = null;
 
     #[Validate('required|string')]
-    public string $title;
+    public ?string $title;
 
     #[Validate('nullable|image')]
     public $image;

@@ -78,7 +78,10 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
             Column::make('Operations')
                 ->label(function ($row) {
                     $row_model = $this->model::where('id', $row->id)->first();
-                    $data = ['row' => $row, 'buttons' => null];
+                    $data = [
+                        'row' => $row,
+                        'buttons' => ['delete'],
+                    ];
                     if ($row_model->question_type == "multipart_question") {
                         $data['buttons'] = [
                             'sub questions',
