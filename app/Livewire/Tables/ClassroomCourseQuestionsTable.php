@@ -6,6 +6,7 @@ use App\Livewire\Management\Questions;
 use App\Models\Management\Classroom;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\Course;
+use App\Models\Management\Option;
 use App\Models\Management\Question;
 use App\Service\DatatableService;
 use App\Service\TextService;
@@ -72,6 +73,12 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
                         return view('components.management.questions.options-html-decode', ['options' => $query->options->pluck('option')->toArray()]);
                     }
                     return null;
+                })
+                ->searchable()
+                ->sortable(),
+            Column::make("Correct Answer (For multiple choice questions)")
+                ->label(function ($query) {
+                    return Option::where('question_id', $query->id)->where('correct',true)->first()->option;
                 })
                 ->searchable()
                 ->sortable(),
