@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title></title>
+    @php
+        $cssPath = public_path('build/assets/fonts-*.css');
+        $cssFiles = glob($cssPath);
+        $cssContent = '';
+
+        if (!empty($cssFiles)) {
+            $cssContent = file_get_contents($cssFiles[0]);
+        }
+    @endphp
     <style>
+{{--        {!! $cssContent !!}--}}
+    </style>
+    <style>
+        * {
+            font-family: 'Vazir', sans-serif !important;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -191,6 +207,8 @@
         .passage-box {
             font-family: inherit;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            page-break-after: avoid;
+            break-after: avoid;
         }
 
         .multi-part-question .question-row:first-of-type {
@@ -286,31 +304,21 @@
     </div>
 
     <div style="margin-top: 24px;">
-
-
         @foreach($questions as $question)
             @switch($question['question_type'])
                 @case('multiple_choice')
-                    <div class="marks-header">
-                        <div>Sec/Q#</div>
-                        <div>Questions</div>
-                    </div>
                     <div class="question-row">
                         <div class="q-num">{{ $loop->iteration }}</div>
 
                         <div class="q-text">
                             <div class="q-title">
-                                @if(str_contains($question['title'], '<img'))
-                                    {!! $question['title'] !!}
-                                @else
-                                    {!! strip_tags($question['title']) !!}
-                                @endif
+                                {!! strip_tags($question['title'], '<sup><sub><img>') !!}
                             </div>
 
                             <div class="q-options">
                                 @foreach($question['options'] as $option)
                                     <div class="option">
-                                        {{ $loop->iteration }}) {!! strip_tags($option) !!}
+                                        {{ $loop->iteration }}) {!! strip_tags($option, '<sup><sub><img>') !!}
                                     </div>
                                 @endforeach
                             </div>
@@ -318,10 +326,10 @@
                     </div>
                     @break
                 @case('multipart_question')
-                    <div class="multi-part-question" style="page-break-inside: avoid;">
+                    <div class="multi-part-question">
                         <!-- Main text / passage -->
                         <div class="passage-box"
-                             style="background: #f9f7f0; padding: 16px; border-radius: 12px; border-left: 5px solid #2c6e2c; margin-bottom: 16px;">
+                             style="background: #f9f7f0; padding: 16px; border-radius: 12px; border-left: 5px solid #2c6e2c; margin-bottom: 16px;; margin-top: 16px;">
                             {!! $question['title'] !!}
                         </div>
 
@@ -331,17 +339,13 @@
                                 <div class="q-num">{{ $loop->iteration }}</div>
                                 <div class="q-text">
                                     <div class="q-title">
-                                        @if(str_contains($sub_question['question'], '<img'))
-                                            {!! $sub_question['question'] !!}
-                                        @else
-                                            {!! strip_tags($sub_question['question']) !!}
-                                        @endif
+                                        {!! strip_tags($sub_question['question'], '<sup><sub><img>') !!}
                                     </div>
 
                                     <div class="q-options">
                                         @foreach($sub_question['options'] as $option)
                                             <div class="option">
-                                                {{ $loop->iteration }}) {!! strip_tags($option) !!}
+                                                {{ $loop->iteration }}) {!! strip_tags($option, '<sup><sub><img>') !!}
                                             </div>
                                         @endforeach
                                     </div>

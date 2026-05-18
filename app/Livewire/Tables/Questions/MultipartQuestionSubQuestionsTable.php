@@ -8,6 +8,7 @@ use App\Models\Management\ClassroomCourse;
 use App\Models\Management\Course;
 use App\Models\Management\Question;
 use App\Models\Management\SubQuestion;
+use App\Models\Management\SubQuestionOption;
 use App\Service\DatatableService;
 use App\Service\TextService;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,6 +72,15 @@ class MultipartQuestionSubQuestionsTable extends DataTableComponent
                 ->label(function ($query) {
                     if ($query->question_type == "multiple_choice") {
                         return view('components.management.questions.options-html-decode', ['options' => $query->options->pluck('option')->toArray()]);
+                    }
+                    return null;
+                })
+                ->searchable()
+                ->sortable(),
+            Column::make("Correct Answer (For multiple choice questions)")
+                ->label(function ($query) {
+                    if ($query->question_type == "multiple_choice") {
+                        return view('components.management.questions.options-html-decode', ['options' => [SubQuestionOption::where('sub_question_id', $query->id)->where('correct', true)->first()->option] ?? []]);
                     }
                     return null;
                 })

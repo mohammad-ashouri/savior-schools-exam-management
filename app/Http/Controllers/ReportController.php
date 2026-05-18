@@ -6,6 +6,7 @@ use App\Models\Management\ClassroomCourse;
 use App\Service\ExamService;
 use App\Service\TextService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Vite;
 use function Spatie\LaravelPdf\Support\pdf;
 
 class ReportController extends Controller
@@ -67,6 +68,7 @@ class ReportController extends Controller
 
         $time = now();
         $file_name = "exam-paper-$classroom_course->id-$time";
+
         return pdf()
             ->footerView('components.pdfs.footer')
             ->view('livewire.reports.types.exam-paper', [

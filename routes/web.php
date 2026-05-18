@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\ReportController;
 use App\Livewire\Dashboard;
 use App\Livewire\Management\Index as ManagementIndex;
@@ -33,8 +34,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/report', [ReportController::class, 'test'])->name('report');
     Route::prefix('report')->group(function () {
-        Route::get('exam-paper/{classroom_course_id}/{term}', [ReportController::class,'getExamPaper'])->name('report.exam-paper');
+        Route::get('exam-paper/{classroom_course_id}/{term}', [ReportController::class, 'getExamPaper'])->name('report.exam-paper');
     });
 });
+
+Route::get('excel', [ExcelController::class, 'index'])->name('excel');
+Route::post('/importQuestions', [ExcelController::class, 'importQuestions'])->name('excel.importQuestions');
+Route::post('/importSubQuestions', [ExcelController::class, 'importSubQuestions'])->name('excel.importSubQuestions');
 
 require __DIR__ . '/auth.php';

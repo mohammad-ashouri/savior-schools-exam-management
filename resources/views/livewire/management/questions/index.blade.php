@@ -172,7 +172,7 @@
 
                 toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code',
 
-                paste_as_text: true,
+                // paste_as_text: true,
 
                 paste_preprocess: function(plugin, args) {
                     args.content = args.content.replace(/<table[\s\S]*?<\/table>/gi, '');

@@ -78,7 +78,10 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
                 ->sortable(),
             Column::make("Correct Answer (For multiple choice questions)")
                 ->label(function ($query) {
-                    return Option::where('question_id', $query->id)->where('correct',true)->first()->option;
+                    if ($query->question_type == "multiple_choice") {
+                        return view('components.management.questions.options-html-decode', ['options' => [Option::where('question_id', $query->id)->where('correct', true)->first()->option] ?? []]);
+                    }
+                    return null;
                 })
                 ->searchable()
                 ->sortable(),
