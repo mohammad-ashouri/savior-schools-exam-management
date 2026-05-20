@@ -166,6 +166,18 @@
                         </div>
                         <x-input-error class="mt-2" :messages="$errors->get('exam_time')"/>
                     </div>
+                    <div class="mt-4 space-y-1">
+                        <x-input-label>Exam Duration (minutes)</x-input-label>
+                        <div class="flex items-center gap-2">
+                            <x-text-input
+                                    type="number"
+                                    wire:change.debounce="setExamDuration"
+                                    class="w-56"
+                                    wire:model="exam_duration"/>
+                            <x-spinners.ring-resize target="setExamDuration" text="Saving..."/>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('exam_duration')"/>
+                    </div>
                 </div>
             </div>
         </div>

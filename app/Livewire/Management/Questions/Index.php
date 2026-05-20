@@ -31,6 +31,8 @@ class Index extends Component
 
     public $exam_time;
 
+    public $exam_duration;
+
     public $selected_question_id;
 
     protected $listeners = [
@@ -84,6 +86,8 @@ class Index extends Component
         $this->exam_date = ExamService::getExamDate($this->classroom_course->id, $this->term);
 
         $this->exam_time = ExamService::getExamTime($this->classroom_course->id, $this->term);
+
+        $this->exam_duration = ExamService::getExamDuration($this->classroom_course->id, $this->term);
     }
 
     /**
@@ -106,7 +110,7 @@ class Index extends Component
     }
 
     /**
-     * Set number of questions in exam
+     * Set exam date
      * @return void
      */
     public function setExamDate(): void
@@ -125,7 +129,7 @@ class Index extends Component
     }
 
     /**
-     * Set number of questions in exam
+     * Set exam time
      * @return void
      */
     public function setExamTime(): void
@@ -137,6 +141,25 @@ class Index extends Component
             'type' => 'exam_time',
         ], [
             'value' => $this->exam_time,
+            'user' => auth()->user()->id
+        ]);
+
+        $this->dispatch('show-notification', 'success-notification');
+    }
+
+    /**
+     * Set exam duration
+     * @return void
+     */
+    public function setExamDuration(): void
+    {
+        $this->validate(['exam_duration' => 'required|integer|min:1|max:360']);
+        ExamInfo::updateOrCreate([
+            'classroom_course_id' => $this->classroom_course->id,
+            'term' => $this->term,
+            'type' => 'exam_duration',
+        ], [
+            'value' => $this->exam_duration,
             'user' => auth()->user()->id
         ]);
 
