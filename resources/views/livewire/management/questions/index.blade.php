@@ -129,17 +129,42 @@
     <div class="py-3 gap-y-1">
         <div class=" mx-auto sm:px-6 lg:px-6">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="grid md:grid-cols-6 p-6 text-gray-900 dark:text-gray-100">
                     <div class="mt-4 space-y-1">
                         <x-input-label>No. of questions in exam</x-input-label>
                         <div class="flex items-center gap-2">
                             <x-text-input
                                     wire:change.debounce="setNoOfQuestions"
+                                    class="w-56"
                                     placeholder="min: 10"
                                     wire:model="no_of_questions"/>
                             <x-spinners.ring-resize target="setNoOfQuestions" text="Saving..."/>
                         </div>
                         <x-input-error class="mt-2" :messages="$errors->get('no_of_questions')"/>
+                    </div>
+                    <div class="mt-4 space-y-1">
+                        <x-input-label>Exam Date</x-input-label>
+                        <div class="flex items-center gap-2">
+                            <x-text-input
+                                    type="date"
+                                    wire:change.debounce="setExamDate"
+                                    class="w-56"
+                                    wire:model="exam_date"/>
+                            <x-spinners.ring-resize target="setExamDate" text="Saving..."/>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('exam_date')"/>
+                    </div>
+                    <div class="mt-4 space-y-1">
+                        <x-input-label>Exam Time</x-input-label>
+                        <div class="flex items-center gap-2">
+                            <x-text-input
+                                    type="time"
+                                    wire:change.debounce="setExamTime"
+                                    class="w-56"
+                                    wire:model="exam_time"/>
+                            <x-spinners.ring-resize target="setExamTime" text="Saving..."/>
+                        </div>
+                        <x-input-error class="mt-2" :messages="$errors->get('exam_time')"/>
                     </div>
                 </div>
             </div>

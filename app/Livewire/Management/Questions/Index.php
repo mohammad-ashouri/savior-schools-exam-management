@@ -27,6 +27,10 @@ class Index extends Component
 
     public $no_of_questions;
 
+    public $exam_date;
+
+    public $exam_time;
+
     public $selected_question_id;
 
     protected $listeners = [
@@ -76,6 +80,10 @@ class Index extends Component
         $this->classroom_course = ClassroomCourse::where('status', 1)->where('id', $classroom_course_id)->firstOrFail();
 
         $this->no_of_questions = ExamService::getNoOfQuestions($this->classroom_course->id, $this->term);
+
+        $this->exam_date = ExamService::getExamDate($this->classroom_course->id, $this->term);
+
+        $this->exam_time = ExamService::getExamTime($this->classroom_course->id, $this->term);
     }
 
     /**
@@ -91,6 +99,44 @@ class Index extends Component
             'type' => 'number_of_questions',
         ], [
             'value' => $this->no_of_questions,
+            'user' => auth()->user()->id
+        ]);
+
+        $this->dispatch('show-notification', 'success-notification');
+    }
+
+    /**
+     * Set number of questions in exam
+     * @return void
+     */
+    public function setExamDate(): void
+    {
+        $this->validate(['exam_date' => 'required|date|after:today']);
+        ExamInfo::updateOrCreate([
+            'classroom_course_id' => $this->classroom_course->id,
+            'term' => $this->term,
+            'type' => 'exam_date',
+        ], [
+            'value' => $this->exam_date,
+            'user' => auth()->user()->id
+        ]);
+
+        $this->dispatch('show-notification', 'success-notification');
+    }
+
+    /**
+     * Set number of questions in exam
+     * @return void
+     */
+    public function setExamTime(): void
+    {
+        $this->validate(['exam_time' => 'required|date_format:H:i']);
+        ExamInfo::updateOrCreate([
+            'classroom_course_id' => $this->classroom_course->id,
+            'term' => $this->term,
+            'type' => 'exam_time',
+        ], [
+            'value' => $this->exam_time,
             'user' => auth()->user()->id
         ]);
 
@@ -156,6 +202,9 @@ class Index extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
+        if (!auth()->user()->can("exam-management.manage-exams")) {
+            abort(403, 'Access denied.');
+        }
         $this->question_form->question_types = ExamService::getQuestionTypes();
         return view('livewire.management.questions.index')
             ->title("Management | Classroom Course | Questions");
