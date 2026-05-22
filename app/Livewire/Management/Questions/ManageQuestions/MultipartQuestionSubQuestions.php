@@ -74,6 +74,9 @@ class MultipartQuestionSubQuestions extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
+        if (!auth()->user()->can("exam-management.manage-exams")) {
+            abort(403, 'Access denied.');
+        }
         $this->question_form->question_types = ExamService::getQuestionTypes(except: ["multipart_question"]);
 
         return view('livewire.management.questions.manage-questions.multipart-question-sub-questions')

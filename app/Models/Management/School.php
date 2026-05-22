@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class School extends Model
 {
 
+    protected $connection = 'mysql_portal';
     protected $table = 'schools';
 
 

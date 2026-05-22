@@ -72,5 +72,14 @@
             </x-primary-button>
         @endif
 
+        @if(in_array('start_exam',$buttons))
+            <x-primary-button
+                    wire:navigate
+                    href="{{ $exam_route_name }}"
+            >
+                Start Exam
+            </x-primary-button>
+        @endif
+
     @endif
 </div>

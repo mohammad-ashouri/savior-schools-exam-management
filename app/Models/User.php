@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasRoles, Notifiable, HasApiTokens;
+    use hasPermissions, HasRoles, Notifiable, HasApiTokens;
 
     protected $connection = 'mysql_portal';
 
@@ -67,7 +68,7 @@ class User extends Authenticatable
 
     public function getRolesNamesAttribute(): string
     {
-        return implode(',',$this->roles()->pluck('name')->toArray());
+        return implode(',', $this->roles()->pluck('name')->toArray());
     }
 
     public function generalInformation(): BelongsTo

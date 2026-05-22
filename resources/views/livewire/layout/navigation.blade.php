@@ -32,10 +32,12 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         Dashboard
                     </x-nav-link>
-
-                    <x-nav-link :href="route('management.index')" :active="request()->routeIs('management.*')" wire:navigate>
-                        Management
-                    </x-nav-link>
+                    @if (auth()->user()->can("exam-management.manage-exams"))
+                        <x-nav-link :href="route('management.index')" :active="request()->routeIs('management.*')"
+                                    wire:navigate>
+                            Management
+                        </x-nav-link>
+                    @endif
 
                     <x-nav-link :href="route('exam.index')" :active="request()->routeIs('exam.*')" wire:navigate>
                         Exam
@@ -45,11 +47,12 @@ new class extends Component {
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown  width="48">
+                <x-dropdown width="48">
                     <x-slot name="trigger">
                         <button
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div x-data="{{ json_encode(['name' => auth()->user()->generalInformation->first_name_en . " " . auth()->user()->generalInformation->last_name_en]) }}" x-text="name"
+                            <div x-data="{{ json_encode(['name' => auth()->user()->generalInformation->first_name_en . " " . auth()->user()->generalInformation->last_name_en]) }}"
+                                 x-text="name"
                                  x-on:profile-updated.window="name = $event.detail.name"></div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -95,13 +98,24 @@ new class extends Component {
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 Dashboard
             </x-responsive-nav-link>
+            @if (auth()->user()->can("exam-management.manage-exams"))
+                <x-responsive-nav-link :href="route('management.index')" :active="request()->routeIs('management.*')"
+                                       wire:navigate>
+                    Management
+                </x-responsive-nav-link>
+            @endif
+
+            <x-responsive-nav-link :href="route('exam.index')" :active="request()->routeIs('exam.*')" wire:navigate>
+                Exam
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200"
-                     x-data="{{ json_encode(['name' => auth()->user()->generalInformation->first_name_en . " " . auth()->user()->generalInformation->last_name_en]) }}" x-text="name"
+                     x-data="{{ json_encode(['name' => auth()->user()->generalInformation->first_name_en . " " . auth()->user()->generalInformation->last_name_en]) }}"
+                     x-text="name"
                      x-on:profile-updated.window="name = $event.detail.name"></div>
                 <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
             </div>

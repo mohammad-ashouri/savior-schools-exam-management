@@ -29,6 +29,9 @@ class Courses extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
+        if (!auth()->user()->can("exam-management.manage-exams")) {
+            abort(403, 'Access denied.');
+        }
         return view('livewire.management.courses')
             ->title("Management | Classroom Course");
     }

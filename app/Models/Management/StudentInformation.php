@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Management;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class GeneralInformation extends Model
+class StudentInformation extends Model
 {
     use SoftDeletes;
 
     protected $connection = 'mysql_portal';
-    protected $table = 'general_informations';
+
+    protected $table = 'student_informations';
+
     protected $hidden = [
-        'adder',
-        'editor',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
-
-    public function getEnFullnameAttribute(): string
-    {
-        return "$this->first_name_en $this->last_name_en";
-    }
 }

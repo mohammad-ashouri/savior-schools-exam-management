@@ -7,6 +7,7 @@ use App\Models\Management\Option;
 use App\Models\Management\Question;
 use App\Models\Management\SubQuestion;
 use App\Models\Management\SubQuestionOption;
+use Carbon\Carbon;
 
 class ExamService
 {
@@ -120,5 +121,119 @@ class ExamService
             ->first();
 
         return !empty($exam_info) ? (int)$exam_info->value : null;
+    }
+
+    /**
+     * Get exam date
+     * @param $classroom_course_id
+     * @param $term
+     * @return string|null
+     */
+    public static function getExamDate($classroom_course_id, $term): ?string
+    {
+        $exam_info = ExamInfo::where('classroom_course_id', $classroom_course_id)
+            ->where('term', $term)
+            ->where('type', 'exam_date')
+            ->first();
+
+        return !empty($exam_info) ? \Carbon\Carbon::parse($exam_info->value)->format('Y-m-d') : null;
+    }
+
+    /**
+     * Get exam time
+     * @param $classroom_course_id
+     * @param $term
+     * @return string|null
+     */
+    public static function getExamTime($classroom_course_id, $term): ?string
+    {
+        $exam_info = ExamInfo::where('classroom_course_id', $classroom_course_id)
+            ->where('term', $term)
+            ->where('type', 'exam_time')
+            ->first();
+
+        return !empty($exam_info) ? $exam_info->value : null;
+    }
+
+    /**
+     * Get exam duration
+     * @param $classroom_course_id
+     * @param $term
+     * @return string|null
+     */
+    public static function getExamDuration($classroom_course_id, $term): ?string
+    {
+        $exam_info = ExamInfo::where('classroom_course_id', $classroom_course_id)
+            ->where('term', $term)
+            ->where('type', 'exam_duration')
+            ->first();
+
+        return !empty($exam_info) ? $exam_info->value : null;
+    }
+
+    /**
+     * Return exam dates
+     * @param $classroom_course_id
+     * @return array
+     */
+    public static function getExamDates($classroom_course_id): array
+    {
+        $info = [];
+        $types = ['first', 'second', 'retake'];
+
+        foreach ($types as $type) {
+            ${"$type"} = ExamInfo::where('classroom_course_id', $classroom_course_id)
+                ->where('term', $type)
+                ->get();
+
+            if (${"$type"}->isNotEmpty()) {
+                $info[] = ${"$type"}->where('type', 'exam_date')->first()?->value;
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Return full exam information
+     * @param $classroom_course_id
+     * @return array
+     */
+    public static function getFullExamInfo($classroom_course_id): array
+    {
+        $info = [];
+        $types = ['first', 'second', 'retake'];
+
+        foreach ($types as $type) {
+            ${"$type"} = ExamInfo::where('classroom_course_id', $classroom_course_id)
+                ->where('term', $type)
+                ->get();
+
+            if (${"$type"}->isNotEmpty()) {
+                $info[$type] = [
+                    'date' => ${"$type"}->where('type', 'exam_date')->first()?->value,
+                    'time' => ${"$type"}->where('type', 'exam_time')->first()?->value,
+                    'duration' => ${"$type"}->where('type', 'exam_duration')->first()?->value,
+                ];
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Check exam status
+     * @param $classroom_course_id
+     * @return ?string
+     */
+    public static function checkExamStatus($classroom_course_id): ?string
+    {
+        foreach (self::getFullExamInfo($classroom_course_id) as $term => $data) {
+            $start = Carbon::parse($data['date'] . ' ' . $data['time']);
+            $end = (clone $start)->addMinutes((int)$data['duration']);
+
+            $show_button = Carbon::now()->between($start, $end);
+
+            if ($show_button) return $term;
+        }
+        return null;
     }
 }

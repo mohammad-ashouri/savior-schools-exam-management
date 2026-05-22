@@ -115,7 +115,7 @@ class Index extends Component
      */
     public function setExamDate(): void
     {
-        $this->validate(['exam_date' => 'required|date|after:today']);
+        $this->validate(['exam_date' => 'required|date|after_or_equal:today']);
         ExamInfo::updateOrCreate([
             'classroom_course_id' => $this->classroom_course->id,
             'term' => $this->term,

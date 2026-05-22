@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Livewire\Management;
+namespace App\Livewire\Exams;
 
-use App\Models\Management\ClassroomCourse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title("Management")]
-class Index extends Component
+class ExamPage extends Component
 {
+    public function mount($selected_student, $exam_id)
+    {
+
+    }
+
     /**
      * Render the component
      * @return View|Application|Factory|\Illuminate\View\View
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
-        if (!auth()->user()->can("exam-management.manage-exams")) {
-            abort(403, 'Access denied.');
-        }
-        return view('livewire.management.index');
+        return view('livewire.exams.exam-page');
     }
 }
