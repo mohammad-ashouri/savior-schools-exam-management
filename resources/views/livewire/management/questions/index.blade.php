@@ -188,6 +188,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <livewire:tables.classroom-course-questions-table
+                            :term="$term"
                             :classroom_course_id="$this->classroom_course->id"/>
                 </div>
             </div>

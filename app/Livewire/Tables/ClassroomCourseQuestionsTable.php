@@ -27,6 +27,8 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
 {
     public $classroom_course_id;
 
+    public $term;
+
     protected $model = Question::class;
 
     public function configure(): void
@@ -37,15 +39,17 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
 
     protected $listeners = ['refreshTable' => '$refresh'];
 
-    public function mount($classroom_course_id): void
+    public function mount($classroom_course_id,$term): void
     {
         $this->classroom_course_id = $classroom_course_id;
+        $this->term=$term;
     }
 
     public function builder(): Builder
     {
         return Question::query()
             ->where('classroom_course_id', $this->classroom_course_id)
+            ->where('term',$this->term)
             ->with(['classroomCourseInfo'])
             ->orderBy('created_at', 'desc');
     }
@@ -79,7 +83,7 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
             Column::make("Correct Answer (For multiple choice questions)")
                 ->label(function ($query) {
                     if ($query->question_type == "multiple_choice") {
-                        return view('components.management.questions.options-html-decode', ['options' => [Option::where('question_id', $query->id)->where('correct', true)->first()->option] ?? []]);
+                        return view('components.management.questions.options-html-decode', ['options' => [Option::where('question_id', $query->id)->where('correct', true)->first()?->option] ?? []]);
                     }
                     return null;
                 })
