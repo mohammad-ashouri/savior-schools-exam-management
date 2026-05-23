@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Models\Exam\StudentExamAnswer;
+use App\Models\Management\ClassroomStudent;
 use App\Models\Management\ExamInfo;
 use App\Models\Management\Option;
 use App\Models\Management\Question;
@@ -235,5 +237,48 @@ class ExamService
             if ($show_button) return $term;
         }
         return null;
+    }
+
+    /**
+     * Check student exists in classroom or not
+     * @param $classroom_student_id
+     * @param $classroom_course_id
+     * @return bool
+     */
+    public static function checkStudentExistsInClassroom($classroom_student_id, $classroom_course_id): bool
+    {
+        return ClassroomStudent::whereId($classroom_student_id)
+            ->whereHas('classroomInfo', function ($q) use ($classroom_course_id) {
+                $q->whereHas('courses', function ($q) use ($classroom_course_id) {
+                    $q->whereId($classroom_course_id);
+                });
+            })->exists();
+    }
+
+    /**
+     * Get number of questions
+     * Default => 60
+     * @param $classroom_course_id
+     * @param $term
+     * @return int|null
+     */
+    public static function getNumberOfQuestions($classroom_course_id, $term): ?int
+    {
+        $number_of_questions = ExamInfo::where('classroom_course_id', $classroom_course_id)
+            ->where('term', $term)
+            ->where('type', 'number_of_questions')
+            ->first();
+
+        return !empty($number_of_questions) ? (int)$number_of_questions->value : 60;
+    }
+
+    /**
+     * Check selected answer in multiple answer questions
+     * @param $student_exam_question_id
+     * @return mixed
+     */
+    public static function checkSelectedAnswerMultipleAnswer($student_exam_question_id): mixed
+    {
+        return StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)->first()?->option_id;
     }
 }

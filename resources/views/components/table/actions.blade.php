@@ -74,8 +74,7 @@
 
         @if(in_array('start_exam',$buttons))
             <x-primary-button
-                    wire:navigate
-                    href="{{ $exam_route_name }}"
+                    wire:click="$dispatch('set-selected-data',{ classroom_course_id: {{ $exam_route_values['classroom_course_id'] }}, student_id:{{ $this->student }} })"
             >
                 Start Exam
             </x-primary-button>

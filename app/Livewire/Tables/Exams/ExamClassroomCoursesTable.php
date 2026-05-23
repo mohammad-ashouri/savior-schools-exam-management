@@ -108,15 +108,13 @@ class ExamClassroomCoursesTable extends DataTableComponent
                     $data = ['row' => $row, 'buttons' => null];
                     $show_button = ExamService::checkExamStatus($row->id);
 
-                    if ($show_button) {
+                    if ($show_button!=null) {
                         $data['buttons'] = [
                             'start_exam',
                         ];
-                        $data['exam_route_name'] =
-                            route('exam.page', [
-                                'selected_student' => $this->student,
-                                'exam_id' => $row->id,
-                            ]);
+                        $data['exam_route_values'] = [
+                            'classroom_course_id' => $row->id,
+                        ];
 //                        $data['exam_button_label'] = $label;
                     }
 

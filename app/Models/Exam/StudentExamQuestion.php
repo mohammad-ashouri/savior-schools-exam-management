@@ -1,27 +1,25 @@
 <?php
 
-namespace App\Models\Management;
+namespace App\Models\Exam;
 
+use App\Models\Management\Question;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SubQuestionOption extends Model
+class StudentExamQuestion extends Model
 {
     use SoftDeletes;
-    protected $table = "sub_question_options";
+
+    protected $table = "student_exam_questions";
     protected $fillable = [
         'id',
-        'sub_question_id',
-        'option',
-        'correct',
-        'adder',
-        'editor',
+        'student_exam_id',
+        'question_id',
     ];
 
     protected $hidden = [
-        'correct',
         'adder',
         'editor',
         'created_at',
@@ -29,9 +27,14 @@ class SubQuestionOption extends Model
         'deleted_at'
     ];
 
-    public function subQuestionInfo(): BelongsTo
+    public function studentExamInfo(): BelongsTo
     {
-        return $this->belongsTo(SubQuestion::class, 'sub_question_id');
+        return $this->belongsTo(StudentExam::class, 'student_exam_id');
+    }
+
+    public function questionInfo(): BelongsTo
+    {
+        return $this->belongsTo(Question::class, 'question_id');
     }
 
     public function adderInfo(): BelongsTo

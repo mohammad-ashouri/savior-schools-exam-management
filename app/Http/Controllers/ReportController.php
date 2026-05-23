@@ -40,7 +40,7 @@ class ReportController extends Controller
 
                 switch ($question->question_type) {
                     case 'multiple_choice':
-                        $data['options'] = $question->options()->inRandomOrder()->pluck('option', 'id')->toArray();
+                        $data['options'] = $question->options()->pluck('option', 'id')->toArray();
                         break;
                     case 'multipart_question':
                         $data['sub_questions'] = $question->subQuestions()

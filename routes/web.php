@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('exams')->group(function () {
         Route::get('/', ExamIndex::class)->name('exam.index');
-        Route::get('/{selected_student}/{exam_id}',ExamPage::class)->name('exam.page');
+        Route::get('/{exam_id}',ExamPage::class)->name('exam.page');
     });
 
     Route::prefix('report')->group(function () {
@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('excel', [ExcelController::class, 'index'])->name('excel');
 Route::post('/importQuestions', [ExcelController::class, 'importQuestions'])->name('excel.importQuestions');
 Route::post('/importSubQuestions', [ExcelController::class, 'importSubQuestions'])->name('excel.importSubQuestions');
+Route::post('/importGeneralBehaviors', [ExcelController::class, 'importGeneralBehaviors'])->name('excel.importGeneralBehaviors');
 
 
 Route::get('temp',function (){

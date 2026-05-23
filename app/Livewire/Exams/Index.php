@@ -2,13 +2,19 @@
 
 namespace App\Livewire\Exams;
 
+use App\Models\Exam\StudentExam;
+use App\Models\Exam\StudentExamQuestion;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\ClassroomStudent;
+use App\Models\Management\ExamInfo;
 use App\Models\Management\StudentApplianceStatus;
 use App\Models\Management\StudentInformation;
+use App\Service\DataService;
+use App\Service\ExamService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -20,23 +26,62 @@ class Index extends Component
 
     public $courses = [];
 
+    #[Url]
     public $student = '';
 
     public ClassroomStudent $classroom_student;
 
-    public function getStudents(): void
-    {
-        $my_students = StudentInformation::where('guardian', auth()->user()->id)->get()->pluck('student_id')->toArray();
-        $this->appliances = StudentApplianceStatus::whereIn('student_id', $my_students)
-            ->whereHas('academicYearInfo', function ($query) {
-                $query->where('status', 1);
-            })
-            ->get()->pluck('id')->toArray();
-    }
+    public ClassroomCourse $selected_course;
 
     public function getCourses(): void
     {
         $this->classroom_student = ClassroomStudent::findOrFail($this->student);
+    }
+
+    /**
+     * Set selected data after click on start exam
+     * @param $classroom_course_id
+     * @return void
+     */
+    #[On('set-selected-data')]
+    public function setSelectedData($classroom_course_id): void
+    {
+        abort_if(!ExamService::checkStudentExistsInClassroom($this->student, $classroom_course_id), 403);
+        $this->selected_course = ClassroomCourse::find($classroom_course_id);
+        $this->dispatch('open-modal', 'start-exam');
+    }
+
+    /**
+     * Make questions and start exam
+     * @return void
+     */
+    public function startExam(): void
+    {
+        $term = ExamService::checkExamStatus($this->selected_course->id);
+        $number_of_questions = ExamService::getNumberOfQuestions($this->selected_course->id, $term);
+
+        $student_exam = StudentExam::where('classroom_student_id', $this->student)
+            ->where('classroom_course_id', $this->selected_course->id)
+            ->where('term', $term)
+            ->first();
+
+        if (empty($student_exam)) {
+            $student_exam = StudentExam::create([
+                'classroom_student_id' => $this->student,
+                'classroom_course_id' => $this->selected_course->id,
+                'term' => $term
+            ]);
+
+            $questions = $this->selected_course->questions($term)->inRandomOrder()->take($number_of_questions)->get();
+            foreach ($questions as $question) {
+                StudentExamQuestion::create([
+                    'student_exam_id' => $student_exam->id,
+                    'question_id' => $question->id,
+                ]);
+            }
+        }
+
+        $this->redirect(route('exam.page', ['exam_id' => $student_exam->id]), navigate: true);
     }
 
     /**
@@ -45,7 +90,12 @@ class Index extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
-        $this->getStudents();
+        $this->appliances = DataService::getStudents();
+
+        if (!empty($this->student)) {
+            $this->getCourses();
+        }
+
         return view('livewire.exams.index', [
             'students' => ClassroomStudent::whereIn('appliance_id', $this->appliances)
                 ->whereHas('classroomInfo', function ($query) {

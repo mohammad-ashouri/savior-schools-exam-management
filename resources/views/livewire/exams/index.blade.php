@@ -5,6 +5,27 @@
         </h2>
     </x-slot>
 
+    <x-modal name="start-exam" :show="$errors->isNotEmpty()" focusable>
+        <form wire:submit="startExam" class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Ready to start exam?
+            </h2>
+            <div class="mt-6 flex justify-end">
+                <x-secondary-button x-on:click="$dispatch('close')">
+                    Close
+                </x-secondary-button>
+
+                <x-success-button
+                        wire:loading.remove
+                        wire:target="startExam"
+                        class="ms-3">
+                    Yes, Start
+                </x-success-button>
+                <x-spinners.ring-resize target="startExam" text="Entering..."/>
+            </div>
+        </form>
+    </x-modal>
+
     <div class="py-3 gap-y-1">
         <div class=" mx-auto sm:px-6 lg:px-6">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

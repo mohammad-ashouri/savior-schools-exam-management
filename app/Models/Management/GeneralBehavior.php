@@ -2,37 +2,31 @@
 
 namespace App\Models\Management;
 
+use App\Models\Lms\GeneralBehaviorQuestion;
 use App\Models\User;
+use App\Services\LogService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SubQuestionOption extends Model
+class GeneralBehavior extends Model
 {
     use SoftDeletes;
-    protected $table = "sub_question_options";
+
+    protected $connection = 'mysql_portal';
+
+    protected $table = 'general_behaviors';
+
     protected $fillable = [
-        'id',
-        'sub_question_id',
-        'option',
-        'correct',
+        'classroom_id',
+        'appliance_id',
+        'question_id',
+        'further_details_description',
+        'grade',
+        'status',
         'adder',
         'editor',
     ];
-
-    protected $hidden = [
-        'correct',
-        'adder',
-        'editor',
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
-
-    public function subQuestionInfo(): BelongsTo
-    {
-        return $this->belongsTo(SubQuestion::class, 'sub_question_id');
-    }
 
     public function adderInfo(): BelongsTo
     {

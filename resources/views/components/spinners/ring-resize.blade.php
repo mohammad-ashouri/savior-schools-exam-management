@@ -2,8 +2,8 @@
     'target'=>null,
     'text'=>null,
 ])
-<div class="gap-2" wire:loading @if($target) wire:target="{{ $target }}" @endif>
-    <div class="!flex items-center">
+<div wire:loading @if($target) wire:target="{{ $target }}" @endif>
+    <div class="!flex items-center gap-2 cursor-pointer">
         <svg width="24" height="24" stroke="#1e3a8a" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <style>
                 .spinner_V8m1 {

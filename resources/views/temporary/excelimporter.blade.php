@@ -12,3 +12,11 @@ SubQuestions <br/>
     <button type="submit">آپلود فایل</button>
 </form>
 @if(session('success')) <p>{{ session()->get('success') }}</p> @endif
+
+General Behaviors <br/>
+<form action="{{ route('excel.importGeneralBehaviors') }}" method="post" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="excel_file" required>
+    <button type="submit">آپلود فایل</button>
+</form>
+@if(session('success')) <p>{{ session()->get('success') }}</p> @endif
