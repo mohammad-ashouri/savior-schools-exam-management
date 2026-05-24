@@ -35,6 +35,7 @@ class ExamClassroomCoursesTable extends DataTableComponent
         DatatableService::setConfigures($this);
         $this->setSearchIcon('heroicon-m-magnifying-glass');
         $this->perPage = 50;
+        $this->setRefreshTime(10000);
     }
 
     protected $listeners = ['refreshTable' => '$refresh'];
