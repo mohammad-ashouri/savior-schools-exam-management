@@ -25,4 +25,9 @@ class StudentExamAnswer extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function studentExamQuestionInfo(): BelongsTo
+    {
+        return $this->belongsTo(StudentExamQuestion::class, 'student_exam_question_id');
+    }
 }

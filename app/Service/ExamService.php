@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\Exam\StudentExamAnswer;
+use App\Models\Exam\StudentExamQuestion;
 use App\Models\Management\ClassroomStudent;
 use App\Models\Management\ExamInfo;
 use App\Models\Management\Option;
@@ -280,5 +281,30 @@ class ExamService
     public static function checkSelectedAnswerMultipleAnswer($student_exam_question_id): mixed
     {
         return StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)->first()?->option_id;
+    }
+
+    /**
+     * Check selected answer in multiple answer questions
+     * @param $student_exam_question_id
+     * @param $sub_question_id
+     * @return mixed
+     */
+    public static function checkSelectedAnswerMultipartQuestion($student_exam_question_id, $sub_question_id): mixed
+    {
+        return StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)
+            ->where('sub_question_id', $sub_question_id)
+            ->first()?->sub_question_option_id;
+    }
+
+    /**
+     * Check how many questions answered in multipart question type
+     * @param $student_exam_question_id
+     * @return bool
+     */
+    public static function checkHowManyQuestionsAnsweredInMultipartQuestion($student_exam_question_id): bool
+    {
+        $student_exam_question_count = StudentExamQuestion::find($student_exam_question_id)->questionInfo->subQuestions->count();
+        $student_exam_answer = StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)->count();
+        return $student_exam_answer == $student_exam_question_count;
     }
 }

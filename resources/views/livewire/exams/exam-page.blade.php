@@ -1,5 +1,5 @@
 @php use App\Service\ExamService; @endphp
-<div>
+<div wire:poll.10s="checkExamStatus">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Exam: {{ $this->student_exam->classroomCourseInfo->courseInfo->name . " | " . $this->student_exam->classroomCourseInfo->courseInfo->gradeInfo->name }}
@@ -29,23 +29,23 @@
 
     <x-modal name="finish-exam" :show="$errors->isNotEmpty()" focusable>
         <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            Ready to finish the exam?
-        </h2>
-        <div class="mt-6 flex justify-end">
-            <x-secondary-button x-on:click="$dispatch('close')">
-                Close
-            </x-secondary-button>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Ready to finish the exam?
+            </h2>
+            <div class="mt-6 flex justify-end">
+                <x-secondary-button x-on:click="$dispatch('close')">
+                    Close
+                </x-secondary-button>
 
-            <x-success-button
-                    wire:loading.remove
-                    wire:target="endExam"
-                    wire:click="endExam"
-                    class="ms-3">
-                Yes, Finished!
-            </x-success-button>
-            <x-spinners.ring-resize target="endExam" text="Entering..."/>
-        </div>
+                <x-success-button
+                        wire:loading.remove
+                        wire:target="endExam"
+                        wire:click="endExam"
+                        class="ms-3">
+                    Yes, Finished!
+                </x-success-button>
+                <x-spinners.ring-resize target="endExam" text="Entering..."/>
+            </div>
         </div>
     </x-modal>
     <div class="py-3 gap-y-1">
@@ -124,6 +124,54 @@
                                 @endforeach
                             </div>
                             @break
+                        @case('multipart_question')
+                            <div class="mb-6">
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                                        <span class="text-blue-600 dark:text-blue-400 font-bold">?</span>
+                                    </div>
+                                    <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
+                                        {!! $this->selected_question['title'] !!}
+                                    </h3>
+                                </div>
+                            </div>
+                            @foreach($this->selected_question['sub_questions'] as $sub_question)
+                                <div wire:key="op-key-{{ $sub_question['id'] }}" class="grid gap-3 my-10">
+                                    <div class="">
+                                        <div class="flex items-start gap-3">
+                                            <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                                                <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $loop->iteration }}</span>
+                                            </div>
+                                            <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
+                                                {!! $sub_question['title'] !!}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $letters = ['A', 'B', 'C', 'D'];
+                                        $index = 0;
+                                    @endphp
+                                    @foreach($sub_question['options'] as $id => $option)
+                                        <label wire:key="op-key-{{ $id }}" class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                            <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
+                                                <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
+                                            </div>
+                                            <input type="radio"
+                                                   name="question_option_{{ $sub_question['id'] }}"
+                                                   id="option_{{ $id }}"
+                                                   value="{{ $id }}"
+                                                   @checked(ExamService::checkSelectedAnswerMultipartQuestion($this->selected_question_id,$sub_question['id'])==$id)
+                                                   wire:click="setOption(null, {{ $sub_question['id'] }},{{ $id }})"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                                            <label for="option_{{ $id }}"
+                                                   class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
+                                                {{ $option }}
+                                            </label>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                            @break
                     @endswitch
                     <div class="flex justify-between items-center align-middle mt-6">
                         @if($show_previous_button)
@@ -163,3 +211,5 @@
         </div>
     </div>
 </div>
+
+@vite(['resources/js/copy-blocker.js'])
