@@ -21,7 +21,7 @@ class ImportQuestions implements ToModel
     public function model(array $row)
     {
         $question = Question::create([
-            'classroom_course_id' => 244,
+            'classroom_course_id' => 105,
             'question_type' => 'multiple_choice',
             'title' => $row[0],
             'term' => 'second',
@@ -32,18 +32,23 @@ class ImportQuestions implements ToModel
             switch ($row[5]) {
                 case 'a':
                 case 'A':
+                case 'الف':
+                case 'أ':
                     $correct = 1;
                     break;
                 case 'b':
                 case 'B':
+                case 'ب':
                     $correct = 2;
                     break;
                 case 'c':
                 case 'C':
+                case 'ج':
                     $correct = 3;
                     break;
                 case 'd':
                 case 'D':
+                case 'د':
                     $correct = 4;
                     break;
                 default:

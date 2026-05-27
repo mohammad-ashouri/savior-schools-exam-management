@@ -13,7 +13,7 @@ class ImportSubQuestions implements ToModel
     public function model(array $row)
     {
         $sub_question = SubQuestion::create([
-            'question_id' => 7218,
+            'question_id' => 8051,
             'question_type' => 'multiple_choice',
             'title' => $row[0],
             'adder' => 1
@@ -23,6 +23,7 @@ class ImportSubQuestions implements ToModel
                 case 'a':
                 case 'A':
                 case 'الف':
+                case 'أ':
                     $correct = 1;
                     break;
                 case 'b':
