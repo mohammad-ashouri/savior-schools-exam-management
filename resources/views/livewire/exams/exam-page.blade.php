@@ -118,7 +118,7 @@
                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                         <label for="option_{{ $id }}"
                                                class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
-                                            {{ $option }}
+                                            {!! $option !!}
                                         </label>
                                     </label>
                                 @endforeach
@@ -165,7 +165,7 @@
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                             <label for="option_{{ $id }}"
                                                    class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
-                                                {{ $option }}
+                                                {!! $option !!}
                                             </label>
                                         </label>
                                     @endforeach
