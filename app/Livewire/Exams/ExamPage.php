@@ -86,7 +86,7 @@ class ExamPage extends Component
      */
     public function showQuestion(): void
     {
-        $selected_question = StudentExamQuestion::find($this->selected_question_id);
+        $selected_question = StudentExamQuestion::whereId($this->selected_question_id)->where('student_exam_id',$this->student_exam->id)->firstOrFail();
         $question = Question::where('id', $selected_question->question_id)->firstOrFail();
 
         $this->selected_question = [
@@ -175,8 +175,15 @@ class ExamPage extends Component
                 }
                 break;
         }
-        if (!$this->selected_question_id) dd($this->selected_question);
-        $this->getQuestion($this->selected_question_id += 1);
+
+        $next_question = StudentExamQuestion::where('student_exam_id', $this->student_exam->id)
+            ->where('id', '>', $this->selected_question_id)
+            ->orderBy('id')
+            ->first();
+
+        $next_question_id = $next_question?->id;
+
+        $this->getQuestion($next_question_id);
     }
 
     /**
@@ -185,7 +192,13 @@ class ExamPage extends Component
      */
     public function previousQuestion(): void
     {
-        $this->getQuestion($this->selected_question_id -= 1);
+        $prev_question = StudentExamQuestion::where('student_exam_id', $this->student_exam->id)
+            ->where('id', '<', $this->selected_question_id)
+            ->orderBy('id')
+            ->first();
+        $prev_question_id = $prev_question?->id;
+
+        $this->getQuestion($prev_question_id);
     }
 
     /**
