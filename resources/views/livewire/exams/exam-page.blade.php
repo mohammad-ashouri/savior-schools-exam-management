@@ -210,6 +210,5 @@
             </div>
         </div>
     </div>
-    @vite(['resources/js/copy-blocker.js'])
 </div>
 

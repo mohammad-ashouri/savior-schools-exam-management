@@ -45,13 +45,18 @@ class ExamPage extends Component
         $my_students = DataService::getStudents();
         abort_if(!in_array($this->student_exam->classroomStudentInfo->applianceInfo->id, $my_students), 403);
 
-        $this->questions = $this->student_exam->questions->map(function ($row) {
-            return [
-                'exam_id' => $this->student_exam->id,
-                'question_id' => $row->id,
-                'id' => $row->questionInfo->id,
-            ];
-        })->toArray();
+        $this->questions = $this->student_exam
+            ->questions()
+            ->orderBy('id')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'exam_id' => $this->student_exam->id,
+                    'question_id' => $row->id,
+                    'id' => $row->questionInfo->id,
+                ];
+            })
+            ->toArray();
 
         $this->selected_question_id = $this->questions[0]['question_id'];
 
@@ -170,6 +175,7 @@ class ExamPage extends Component
                 }
                 break;
         }
+        if (!$this->selected_question_id) dd($this->selected_question);
         $this->getQuestion($this->selected_question_id += 1);
     }
 

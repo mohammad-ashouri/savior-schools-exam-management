@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title></title>
-    @php
-        $cssPath = public_path('build/assets/fonts-*.css');
-        $cssFiles = glob($cssPath);
-        $cssContent = '';
+{{--    @php--}}
+{{--        $cssPath = public_path('build/assets/fonts-*.css');--}}
+{{--        $cssFiles = glob($cssPath);--}}
+{{--        $cssContent = '';--}}
 
-        if (!empty($cssFiles)) {
-            $cssContent = file_get_contents($cssFiles[0]);
-        }
-    @endphp
+{{--        if (!empty($cssFiles)) {--}}
+{{--            $cssContent = file_get_contents($cssFiles[0]);--}}
+{{--        }--}}
+{{--    @endphp--}}
     <style>
 {{--        {!! $cssContent !!}--}}
     </style>
@@ -175,6 +175,12 @@
             color: #4a627a;
         }
 
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .school-info {
             text-align: center;
             flex: 1;
@@ -274,28 +280,30 @@
 
     <div class="header-top">
         <div class="logo-left">
-            <div class="logo-placeholder">📖</div>
+            <div class="logo-placeholder">
+                <img src="{{ public_path('build/images/ministry_logo.png') }}" alt="logo-placeholder"/>
+            </div>
         </div>
         <div class="school-info">
             <div class="school-name">Monji International Schools</div>
             <div class="kawthar">{{ $classroom_course->classroomInfo->academicYearInfo->schoolInfo->name }}</div>
         </div>
         <div class="logo-right">
-            <div class="logo-placeholder">⭐</div>
+            <div class="logo-placeholder">
+                <img src="{{ public_path('build/images/logo.png') }}" alt="logo-placeholder"/>
+            </div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 5px 0 0px 0; font-weight: bold; font-size: 1.35rem; color: #004070;">
         2<sup>nd</sup> End-Term Examination 2025-2026
     </div>
-
     <div class="header-details">
-        <div class="detail-item"> Date: {{ now()->format('Y-m-d') }}</div>
+        <div class="detail-item"> Date: {{ \App\Service\ExamService::getExamDate($classroom_course->id,$term_value) }}</div>
         <div class="detail-item"> Subject: {{ $classroom_course->courseInfo->name }}</div>
-        <div class="detail-item"> Time: ______90______ Minutes</div>
+        <div class="detail-item"> Time: {{ \App\Service\ExamService::getExamDuration($classroom_course->id,$term_value) }} Minutes</div>
         <div class="detail-item"> Marks: _______________ out of <strong>60</strong></div>
         <div class="detail-item"> {{ $classroom_course->classroomInfo->gradeInfo->name }}</div>
-        <div class="detail-item"> No. of Pages: @totalPages</div>
     </div>
 
     <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;">
@@ -356,10 +364,6 @@
                     @break
             @endswitch
         @endforeach
-        <!-- Multi-part question: passage with sub-questions -->
-        <div style="text-align: right; font-weight: bold; margin-top: 16px; padding: 8px 12px; background: #f1f5f9; border-radius: 12px;">
-            Total Marks: 60 (All questions carry 1 mark each)
-        </div>
     </div>
 
     <div class="footer-note">

@@ -73,6 +73,7 @@ class ReportController extends Controller
             ->footerView('components.pdfs.footer')
             ->view('livewire.reports.types.exam-paper', [
                 'classroom_course' => $classroom_course,
+                'term_value' => $term,
                 'term' => TextService::getTermTypeTitle($term),
                 'questions' => $questions,
             ])
