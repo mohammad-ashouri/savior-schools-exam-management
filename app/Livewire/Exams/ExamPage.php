@@ -194,7 +194,7 @@ class ExamPage extends Component
     {
         $prev_question = StudentExamQuestion::where('student_exam_id', $this->student_exam->id)
             ->where('id', '<', $this->selected_question_id)
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->first();
         $prev_question_id = $prev_question?->id;
 
