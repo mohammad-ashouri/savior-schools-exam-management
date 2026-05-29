@@ -13,7 +13,6 @@ class Dashboard extends Component
 {
     public function render(): Factory|Application|View|\Illuminate\View\View
     {
-        $this->getExpiredAndNotExpiredServices();
         return view('livewire.dashboard', [
         ]);
     }

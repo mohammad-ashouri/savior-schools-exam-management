@@ -75,7 +75,7 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
             Column::make("Options (For multiple choice questions)")
                 ->label(function ($query) {
                     if ($query->question_type == "multiple_choice") {
-                        return view('components.management.questions.options-html-decode', ['options' => $query->options->pluck('option')->toArray()]);
+                        return view('components.management.questions.options-html-decode', ['options' => $query->options->sortBy('id')->pluck('option')->toArray()]);
                     }
                     return null;
                 })

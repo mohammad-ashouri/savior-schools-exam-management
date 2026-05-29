@@ -53,6 +53,7 @@
                                                 <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
                                             </div>
                                             <input type="radio"
+                                                   disabled
                                                    name="question_option_{{ $question->id }}"
                                                    id="option_{{ $option->id }}"
                                                    value="{{ $option->id }}"
