@@ -58,6 +58,7 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
     {
         return [
             Column::make("Id", "id")
+                ->searchable()
                 ->sortable(),
             Column::make("Type", "question_type")
                 ->format(function ($value) {
