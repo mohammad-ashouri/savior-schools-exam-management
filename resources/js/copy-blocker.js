@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-
+console.log('DOMContentLoaded');
     function isMobile() {
 
         const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
