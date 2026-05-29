@@ -43,11 +43,26 @@ class Index extends Component
         } elseif (auth()->user()->hasRole(['Principal', 'Admissions Officer']) and !auth()->user()->hasRole(['Super Admin'])) {
             $myAllAccesses = UserAccessInformation::whereUserId(auth()->user()->id)->first();
             $filteredArray = $this->getFilteredAccessesPA($myAllAccesses);
-            dd($filteredArray);
-        } elseif (auth()->user()->hasRole(['Teacher'])) {
-            $myAllAccesses = UserAccessInformation::whereUserId(auth()->user()->id)->first();
-            $filteredArray = $this->getFilteredAccessesPA($myAllAccesses);
-            dd($filteredArray);
+            $this->academic_years = $academic_years->whereIn('school_id', $filteredArray)
+                ->orderByDesc('created_at')
+                ->get()
+                ->pluck('name', 'id')
+                ->toArray();
+        } elseif (auth()->user()->hasExactRoles(['Teacher'])) {
+            $my_academic_years = ClassroomCourse::where('teacher_id', auth()->user()->id)
+                ->get()
+                ->map(function ($item) {
+                    return $item->classroomInfo->academicYearInfo->id;
+                })
+                ->unique()
+                ->values()
+                ->toArray();
+
+            $this->academic_years = $academic_years->whereIn('id', $my_academic_years)
+                ->orderByDesc('created_at')
+                ->get()
+                ->pluck('name', 'id')
+                ->toArray();
         } else {
             abort(403, 'Access denied.');
         }
@@ -70,7 +85,15 @@ class Index extends Component
      */
     private function getClassrooms(): void
     {
-        $this->classrooms = Classroom::where('academic_year_id', $this->academic_year)->pluck('name', 'id')->toArray();
+        $classroom = Classroom::query()->where('academic_year_id', $this->academic_year);
+
+        if (auth()->user()->hasExactRoles(['Teacher'])) {
+            $classroom->whereHas('courses', function ($query) {
+                $query->where('teacher_id', auth()->user()->id);
+            });
+        }
+
+        $this->classrooms = $classroom->pluck('name', 'id')->toArray();
     }
 
     /**
@@ -89,8 +112,13 @@ class Index extends Component
      */
     private function getClassroomCourses(): void
     {
-        $this->classroom_courses = ClassroomCourse::where('classroom_id', $this->classroom_id)
-            ->get()
+        $classroom_courses = ClassroomCourse::where('classroom_id', $this->classroom_id);
+
+        if (auth()->user()->hasExactRoles(['Teacher'])) {
+            $classroom_courses->where('teacher_id', auth()->user()->id);
+        }
+
+        $this->classroom_courses = $classroom_courses->get()
             ->sortBy(fn($item) => $item->courseInfo?->name)
             ->mapWithKeys(function (ClassroomCourse $classroom_course) {
                 return [
