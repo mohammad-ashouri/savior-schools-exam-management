@@ -42,6 +42,13 @@ new class extends Component {
                     <x-nav-link :href="route('exam.index')" :active="request()->routeIs('exam.*')" wire:navigate>
                         Exam
                     </x-nav-link>
+
+                    @if (auth()->user()->can("exam-management.results"))
+                        <x-nav-link :href="route('exam-result.index')" :active="request()->routeIs('exam-result.*')"
+                                    wire:navigate>
+                            Exam Results
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -108,6 +115,13 @@ new class extends Component {
             <x-responsive-nav-link :href="route('exam.index')" :active="request()->routeIs('exam.*')" wire:navigate>
                 Exam
             </x-responsive-nav-link>
+
+            @if (auth()->user()->can("exam-management.results"))
+                <x-responsive-nav-link :href="route('exam-result.index')" :active="request()->routeIs('exam-result.*')"
+                            wire:navigate>
+                    Exam Results
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

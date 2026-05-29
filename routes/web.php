@@ -9,7 +9,8 @@ use App\Livewire\Management\Courses as ManagementCoursesIndex;
 use App\Livewire\Management\Questions\Index as ManagementQuestionsIndex;
 use App\Livewire\Management\Questions\ManageQuestions\MultipartQuestionSubQuestions as ManageSubQuestionsMultipartQuestion;
 use App\Livewire\Exams\Index as ExamIndex;
-use App\Livewire\Reports\Types\ExamPaper;
+use App\Livewire\ExamResults\Index as ExamResultsIndex;
+use App\Livewire\ExamResults\Show as ExamResultsShow;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -27,6 +28,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('exams')->group(function () {
         Route::get('/', ExamIndex::class)->name('exam.index');
         Route::get('/{exam_id}',ExamPage::class)->name('exam.page');
+    });
+
+    Route::prefix('exam-result')->group(function () {
+        Route::get('/', ExamResultsIndex::class)->name('exam-result.index');
+        Route::get('/{student_exam_id}',ExamResultsShow::class)->name('exam-result.show');
     });
 
     Route::prefix('report')->group(function () {

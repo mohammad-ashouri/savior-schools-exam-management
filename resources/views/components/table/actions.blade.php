@@ -80,5 +80,14 @@
             </x-primary-button>
         @endif
 
+        @if(in_array('show_exam_form',$buttons))
+            <x-primary-button
+                    wire:navigate
+                    href="{{ $exam_route_values }}"
+            >
+                Exam Form
+            </x-primary-button>
+        @endif
+
     @endif
 </div>

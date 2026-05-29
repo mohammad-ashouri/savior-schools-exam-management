@@ -262,23 +262,19 @@
             // پاک کردن editor ها
             Livewire.on('clear-tinymce', () => {
 
-                tinymce.editors.forEach(editor => {
+                const editors = tinymce.get(); // همه editorها
 
-                    if (!editor || editor.removed) return;
+                Object.values(editors).forEach(editor => {
 
-                    // فقط این کار
+                    if (!editor) return;
+
                     editor.setContent('');
 
-                    const input =
-                        document.getElementById(editor.id + '-input');
+                    const input = document.getElementById(editor.id + '-input');
 
                     if (input) {
-
                         input.value = '';
-
-                        input.dispatchEvent(
-                            new Event('input', { bubbles: true })
-                        );
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
                     }
                 });
             });
