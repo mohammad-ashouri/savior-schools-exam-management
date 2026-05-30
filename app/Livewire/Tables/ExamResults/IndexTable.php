@@ -57,7 +57,7 @@ class IndexTable extends DataTableComponent
                 ->sortable(),
             Column::make("Student", 'classroom_student_id')
                 ->format(function ($query, $q) {
-                    return $q->classroomStudentInfo->applianceInfo->studentGeneralInfo->en_fullname;
+                    return $q->classroomStudentInfo->applianceInfo->student_id . " - " . $q->classroomStudentInfo->applianceInfo->studentGeneralInfo->en_fullname;
                 })
                 ->sortable(),
             Column::make("Started At", 'created_at')

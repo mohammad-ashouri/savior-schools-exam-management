@@ -20,8 +20,9 @@ class ImportQuestions implements ToModel
 
     public function model(array $row)
     {
+        if (empty($row[0])) dd($row[1]);
         $question = Question::create([
-            'classroom_course_id' => 41,
+            'classroom_course_id' => 247,
             'question_type' => 'multiple_choice',
             'title' => $row[0],
             'term' => 'second',
