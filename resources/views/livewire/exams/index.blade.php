@@ -26,6 +26,19 @@
         </form>
     </x-modal>
 
+    <x-modal name="finished-notif" :show="$errors->isNotEmpty()" focusable>
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                You have already completed this exam. Your submission has been finalized!
+            </h2>
+            <div class="mt-6 flex justify-end">
+                <x-secondary-button x-on:click="$dispatch('close')">
+                    Close
+                </x-secondary-button>
+            </div>
+        </div>
+    </x-modal>
+
     <div class="py-3 gap-y-1">
         <div class=" mx-auto sm:px-6 lg:px-6">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

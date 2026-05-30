@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Exam\StudentExam;
 use App\Models\Exam\StudentExamAnswer;
 use App\Models\Exam\StudentExamQuestion;
 use App\Models\Management\ClassroomStudent;
@@ -307,4 +308,17 @@ class ExamService
         $student_exam_answer = StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)->count();
         return $student_exam_answer == $student_exam_question_count;
     }
+
+    /**
+     * Check student finished exam or not
+     * @param $classroom_student_id
+     * @param $classroom_course_id
+     * @param $term
+     * @return bool
+     */
+    public static function checkStudentFinishedExam($classroom_student_id, $classroom_course_id, $term): bool
+    {
+        return StudentExam::where('classroom_course_id', $classroom_course_id)->where('classroom_student_id', $classroom_student_id)->where('term', $term)->exists();
+    }
+
 }

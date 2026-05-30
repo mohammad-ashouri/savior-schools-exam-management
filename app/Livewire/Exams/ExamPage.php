@@ -42,8 +42,13 @@ class ExamPage extends Component
     {
         $this->student_exam = StudentExam::findOrFail($exam_id);
 
-        $my_students = DataService::getStudents();
+        $my_students = DataService::getMyStudents();
         abort_if(!in_array($this->student_exam->classroomStudentInfo->applianceInfo->id, $my_students), 403);
+
+        if ($this->student_exam->status==1){
+            session()->flash('error', 'You have already completed this exam. Your submission has been finalized!');
+            $this->redirect(route('exam.index'));
+        }
 
         $this->questions = $this->student_exam
             ->questions()
@@ -71,8 +76,8 @@ class ExamPage extends Component
     {
         $exam_status = ExamService::checkExamStatus($this->student_exam->classroomCourseInfo->id);
         if ($exam_status == null) {
-            session()->flash('error','Exam time is over!');
-            $this->redirect(route('exam.index'),navigate: true);
+            session()->flash('error', 'Exam time is over!');
+            $this->redirect(route('exam.index'), navigate: true);
         }
 
         $this->exam_date = ExamService::getExamDate($this->student_exam->classroomCourseInfo->id, $exam_status);
@@ -86,7 +91,7 @@ class ExamPage extends Component
      */
     public function showQuestion(): void
     {
-        $selected_question = StudentExamQuestion::whereId($this->selected_question_id)->where('student_exam_id',$this->student_exam->id)->firstOrFail();
+        $selected_question = StudentExamQuestion::whereId($this->selected_question_id)->where('student_exam_id', $this->student_exam->id)->firstOrFail();
         $question = Question::where('id', $selected_question->question_id)->firstOrFail();
 
         $this->selected_question = [
@@ -161,7 +166,7 @@ class ExamPage extends Component
      */
     public function nextQuestion(): void
     {
-        switch ($this->selected_question['question_type']){
+        switch ($this->selected_question['question_type']) {
             case 'multiple_choice':
                 if (ExamService::checkSelectedAnswerMultipleAnswer($this->selected_question_id) == null) {
                     $this->dispatch('open-modal', 'next-notif');
@@ -207,6 +212,7 @@ class ExamPage extends Component
      */
     public function endExam(): void
     {
+        $this->student_exam->update(['finished_at' => now(), 'status' => 1]);
         $this->redirect(route('exam.index'), navigate: true);
         session()->flash('success', 'Exam finished successfully.');
     }

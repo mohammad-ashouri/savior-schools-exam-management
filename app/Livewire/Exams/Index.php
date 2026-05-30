@@ -46,9 +46,17 @@ class Index extends Component
     #[On('set-selected-data')]
     public function setSelectedData($classroom_course_id): void
     {
-        abort_if(!ExamService::checkStudentExistsInClassroom($this->student, $classroom_course_id), 403);
-        $this->selected_course = ClassroomCourse::find($classroom_course_id);
-        $this->dispatch('open-modal', 'start-exam');
+        $term = ExamService::checkStudentExistsInClassroom($this->student, $classroom_course_id);
+        abort_if(!$term, 403);
+
+        $finished_exam = ExamService::checkStudentFinishedExam($this->student, $classroom_course_id, ExamService::checkExamStatus($classroom_course_id));
+
+        if ($finished_exam) {
+            $this->dispatch('open-modal', 'finished-notif');
+        } else {
+            $this->selected_course = ClassroomCourse::find($classroom_course_id);
+            $this->dispatch('open-modal', 'start-exam');
+        }
     }
 
     /**
@@ -90,7 +98,7 @@ class Index extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
-        $this->appliances = DataService::getStudents();
+        $this->appliances = DataService::getMyStudents();
 
         if (!empty($this->student)) {
             $this->getCourses();

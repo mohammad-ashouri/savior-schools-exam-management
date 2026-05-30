@@ -19,6 +19,8 @@ class StudentExam extends Model
         'classroom_student_id',
         'classroom_course_id',
         'term',
+        'finished_at',
+        'status',
     ];
 
     protected $hidden = [
