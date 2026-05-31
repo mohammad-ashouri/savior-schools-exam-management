@@ -23,18 +23,18 @@
             <div class="bg-white mt-3  overflow-hidden shadow-sm sm:rounded-lg">
                 @foreach($this->student_exam->questions as $question)
                     <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div class="mb-6">
+                            <div class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                                    <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $loop->iteration }}</span>
+                                </div>
+                                <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
+                                    {!! $question->questionInfo->title !!}
+                                </h3>
+                            </div>
+                        </div>
                         @switch($question->questionInfo->question_type)
                             @case('multiple_choice')
-                                <div class="mb-6">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                                            <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $loop->iteration }}</span>
-                                        </div>
-                                        <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
-                                            {!! $question->questionInfo->title !!}
-                                        </h3>
-                                    </div>
-                                </div>
 
                                 <div class="grid gap-3">
                                     @php
@@ -68,25 +68,15 @@
                                 </div>
                                 @break
                             @case('multipart_question')
-                                <div class="mb-6">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                                            <span class="text-blue-600 dark:text-blue-400 font-bold">?</span>
-                                        </div>
-                                        <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
-                                            {!! $this->selected_question['title'] !!}
-                                        </h3>
-                                    </div>
-                                </div>
-                                @foreach($this->selected_question['sub_questions'] as $sub_question)
-                                    <div wire:key="op-key-{{ $sub_question['id'] }}" class="grid gap-3 my-10">
+                                @foreach($question->questionInfo->subQuestions as $sub_question)
+                                    <div wire:key="op-key-{{ $sub_question->id }}" class="grid gap-3 my-10 pl-12">
                                         <div class="">
                                             <div class="flex items-start gap-3">
                                                 <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                                                     <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $loop->iteration }}</span>
                                                 </div>
                                                 <h3 class="flex-1 text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
-                                                    {!! $sub_question['title'] !!}
+                                                    {!! $sub_question->title !!}
                                                 </h3>
                                             </div>
                                         </div>
@@ -94,22 +84,27 @@
                                             $letters = ['A', 'B', 'C', 'D'];
                                             $index = 0;
                                         @endphp
-                                        @foreach($sub_question['options'] as $id => $option)
-                                            <label wire:key="op-key-{{ $id }}"
-                                                   class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
-                                                <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
+                                        @foreach($sub_question->options as $option)
+                                            @php
+                                                $selected=ExamService::checkSelectedAnswerMultipartQuestion($question->id,$sub_question->id)==$option->id;
+                                            @endphp
+                                            <label wire:key="op-key-{{ $option->id }}"
+                                                   class="flex
+                                                   @if($selected && $option->correct) bg-green-300 @endif
+                                                   @if($selected && !$option->correct) bg-red-400 @endif
+                                                   items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                                <div class="flex-shrink-0 w-8 h-8 {{ $option->correct ? 'bg-green-400' : 'bg-gray-100' }} dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
                                                     <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
                                                 </div>
                                                 <input type="radio"
-                                                       name="question_option_{{ $sub_question['id'] }}"
-                                                       id="option_{{ $id }}"
-                                                       value="{{ $id }}"
-                                                       @checked(ExamService::checkSelectedAnswerMultipartQuestion($this->selected_question_id,$sub_question['id'])==$id)
-                                                       wire:click="setOption(null, {{ $sub_question['id'] }},{{ $id }})"
+                                                       name="question_option_{{ $option->id }}"
+                                                       disabled
+                                                       id="option_{{ $option->id }}"
+                                                       @checked($selected)
                                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
-                                                <label for="option_{{ $id }}"
+                                                <label for="option_{{ $option->id }}"
                                                        class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
-                                                    {!! $option !!}
+                                                    {!! $option->option !!}
                                                 </label>
                                             </label>
                                         @endforeach
