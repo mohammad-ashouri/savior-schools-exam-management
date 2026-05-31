@@ -7,6 +7,7 @@ use App\Service\ExamService;
 use App\Service\TextService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Vite;
+use Spatie\Browsershot\Browsershot;
 use function Spatie\LaravelPdf\Support\pdf;
 
 class ReportController extends Controller
@@ -71,6 +72,21 @@ class ReportController extends Controller
 
         return pdf()
             ->footerView('components.pdfs.footer')
+            ->withBrowsershot(function (Browsershot $browsershot) {
+                $browsershot->setChromePath('/usr/bin/google-chrome')
+                    ->noSandbox()
+                    ->setOption('env', [
+                        'HOME' => '/tmp',
+                        'XDG_CONFIG_HOME' => '/tmp',
+                        'XDG_CACHE_HOME' => '/tmp',
+                    ])
+                    ->setOption('args', [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                        '--disable-dev-shm-usage',
+                        '--disable-gpu',
+                    ]);;
+            })
             ->view('livewire.reports.types.exam-paper', [
                 'classroom_course' => $classroom_course,
                 'term_value' => $term,

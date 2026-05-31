@@ -318,7 +318,11 @@ class ExamService
      */
     public static function checkStudentFinishedExam($classroom_student_id, $classroom_course_id, $term): bool
     {
-        return StudentExam::where('classroom_course_id', $classroom_course_id)->where('classroom_student_id', $classroom_student_id)->where('term', $term)->exists();
+        return StudentExam::where('classroom_course_id', $classroom_course_id)
+            ->where('classroom_student_id', $classroom_student_id)
+            ->where('term', $term)
+            ->where('status',1)
+            ->exists();
     }
 
 }
