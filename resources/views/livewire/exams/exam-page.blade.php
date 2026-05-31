@@ -32,6 +32,9 @@
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Ready to finish the exam?
             </h2>
+            <h2 class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Once submitted, your answers will be finalized and cannot be changed.
+            </h2>
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
                     Close
