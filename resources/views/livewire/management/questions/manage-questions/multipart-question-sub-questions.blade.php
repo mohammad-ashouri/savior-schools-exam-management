@@ -17,7 +17,7 @@
             | {{ TextService::getTermTypeTitle($this->question->term) }} Exam Questions
             | Sub Questions
         </h2>
-        <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight whitespace-nowrap truncate">
+        <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight ">
             {!! $this->question->title !!}
         </h2>
     </x-slot>
