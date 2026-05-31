@@ -12,6 +12,7 @@ use App\Service\ExamService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -210,6 +211,7 @@ class ExamPage extends Component
      * End exam and redirect to exam index
      * @return void
      */
+    #[On('finish-exam')]
     public function endExam(): void
     {
         $this->student_exam->update(['finished_at' => now(), 'status' => 1]);

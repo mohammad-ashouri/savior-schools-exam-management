@@ -10,6 +10,52 @@
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Exam Date And Time: {{ $this->exam_date . " - " . $this->exam_time . " - " . $this->exam_duration }} Minutes
         </h2>
+        @php
+            $duration = (int) $this->exam_duration;
+
+            $endTime = \Carbon\Carbon::createFromFormat(
+                'Y-m-d H:i',
+                $this->exam_date . ' ' . $this->exam_time
+            )->addMinutes($duration)->format('Y-m-d H:i:s');
+        @endphp
+
+        <div
+                x-data="{
+        endTime: new Date('{{ $endTime }}').getTime(),
+        remaining: '00:00:00',
+
+        init() {
+            this.updateTimer();
+
+            setInterval(() => {
+                this.updateTimer();
+            }, 1000);
+        },
+
+        updateTimer() {
+            let distance = this.endTime - Date.now();
+
+            if (distance <= 0) {
+                this.remaining = '00:00:00';
+                $wire.dispatch('finish-exam');
+                return;
+            }
+
+            let hours = Math.floor(distance / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            this.remaining =
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+        }
+    }"
+                class="text-red-500 font-bold text-2xl"
+        >
+            ⏳ Time Remaining:
+            <span x-text="remaining"></span>
+        </div>
     </x-slot>
 
     <x-modal name="next-notif" :show="$errors->isNotEmpty()" focusable>
@@ -139,7 +185,7 @@
                                 </div>
                             </div>
                             @foreach($this->selected_question['sub_questions'] as $sub_question)
-                                <div wire:key="op-key-{{ $sub_question['id'] }}" class="grid gap-3 my-10">
+                                <div wire:key="op-key-{{ $sub_question['id'] }}" class="grid gap-3 my-10 pl-12">
                                     <div class="">
                                         <div class="flex items-start gap-3">
                                             <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
