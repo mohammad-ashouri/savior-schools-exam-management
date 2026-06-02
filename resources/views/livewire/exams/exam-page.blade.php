@@ -1,5 +1,5 @@
 @php use App\Service\ExamService; @endphp
-<div wire:poll.10s="checkExamStatus">
+<div wire:poll.30s="checkExamStatus">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Exam: {{ $this->student_exam->classroomCourseInfo->courseInfo->name . " | " . $this->student_exam->classroomCourseInfo->courseInfo->gradeInfo->name }}
@@ -209,6 +209,8 @@
                                                    name="question_option_{{ $sub_question['id'] }}"
                                                    id="option_{{ $id }}"
                                                    value="{{ $id }}"
+                                                   wire:loading.remove
+                                                   wire:loading.attr="disabled"
                                                    @checked(ExamService::checkSelectedAnswerMultipartQuestion($this->selected_question_id,$sub_question['id'])==$id)
                                                    wire:click="setOption(null, {{ $sub_question['id'] }},{{ $id }})"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
@@ -249,6 +251,7 @@
                             <button
                                     wire:click="$dispatch('open-modal','finish-exam')"
                                     wire:loading.remove
+                                    wire:target="setOption"
                                     class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                                 Finish!
                             </button>

@@ -3,6 +3,7 @@
 namespace App\Models\Management;
 
 use App\Models\User;
+use App\Service\LogService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,6 +33,23 @@ class Question extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function ($model) {
+            LogService::log('questions', [
+                'job' => 'question created',
+                'value' => $model->toArray(),
+            ]);
+        });
+        static::updated(function ($model) {
+            LogService::log('questions', [
+                'job' => 'question updated',
+                'old value' => $model->getOriginal(),
+                'new value' => $model->getDirty(),
+            ]);
+        });
+    }
 
     public function classroomCourseInfo(): BelongsTo
     {

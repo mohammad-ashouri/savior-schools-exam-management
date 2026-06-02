@@ -5,6 +5,7 @@ namespace App\Models\Exam;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\ClassroomStudent;
 use App\Models\User;
+use App\Service\LogService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,6 +31,23 @@ class StudentExam extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function ($model) {
+            LogService::log('student exams', [
+                'job' => 'student exams created',
+                'value' => $model->toArray(),
+            ]);
+        });
+        static::updated(function ($model) {
+            LogService::log('student exams', [
+                'job' => 'student exams updated',
+                'old value' => $model->getOriginal(),
+                'new value' => $model->getDirty(),
+            ]);
+        });
+    }
 
     public function classroomStudentInfo(): BelongsTo
     {

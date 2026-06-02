@@ -4,6 +4,7 @@ namespace App\Models\Exam;
 
 use App\Models\Management\Question;
 use App\Models\User;
+use App\Service\LogService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,6 +27,23 @@ class StudentExamQuestion extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function ($model) {
+            LogService::log('student exam questions', [
+                'job' => 'student exam question created',
+                'value' => $model->toArray(),
+            ]);
+        });
+        static::updated(function ($model) {
+            LogService::log('student exam questions', [
+                'job' => 'student exam question updated',
+                'old value' => $model->getOriginal(),
+                'new value' => $model->getDirty(),
+            ]);
+        });
+    }
 
     public function studentExamInfo(): BelongsTo
     {
