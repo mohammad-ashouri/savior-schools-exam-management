@@ -41,7 +41,7 @@ class ReportController extends Controller
 
                 switch ($question->question_type) {
                     case 'multiple_choice':
-                        $data['options'] = $question->options()->pluck('option', 'id')->toArray();
+                        $data['options'] = $question->options->sortBy('id')->pluck('option', 'id')->toArray();
                         break;
                     case 'multipart_question':
                         $data['sub_questions'] = $question->subQuestions()
@@ -53,7 +53,7 @@ class ReportController extends Controller
                                         return [
                                             'id' => $query->id,
                                             'question' => $query->title,
-                                            'options' => $query->options->pluck('option', 'id')->toArray()
+                                            'options' => $query->options->sortBy('id')->pluck('option', 'id')->toArray()
                                         ];
                                     default:
                                         return [];
@@ -73,19 +73,21 @@ class ReportController extends Controller
         return pdf()
             ->footerView('components.pdfs.footer')
             ->withBrowsershot(function (Browsershot $browsershot) {
-                $browsershot->setChromePath('/usr/bin/google-chrome')
-                    ->noSandbox()
-                    ->setOption('env', [
-                        'HOME' => '/tmp',
-                        'XDG_CONFIG_HOME' => '/tmp',
-                        'XDG_CACHE_HOME' => '/tmp',
-                    ])
-                    ->setOption('args', [
-                        '--no-sandbox',
-                        '--disable-setuid-sandbox',
-                        '--disable-dev-shm-usage',
-                        '--disable-gpu',
-                    ]);;
+                if (app()->environment('production')) {
+                    $browsershot->setChromePath('/usr/bin/google-chrome')
+                        ->noSandbox()
+                        ->setOption('env', [
+                            'HOME' => '/tmp',
+                            'XDG_CONFIG_HOME' => '/tmp',
+                            'XDG_CACHE_HOME' => '/tmp',
+                        ])
+                        ->setOption('args', [
+                            '--no-sandbox',
+                            '--disable-setuid-sandbox',
+                            '--disable-dev-shm-usage',
+                            '--disable-gpu',
+                        ]);
+                }
             })
             ->view('livewire.reports.types.exam-paper', [
                 'classroom_course' => $classroom_course,
