@@ -89,7 +89,7 @@ class Index extends Component
             }
         }
 
-        $this->redirect(route('exam.page', ['exam_id' => $student_exam->id]), navigate: true);
+        $this->redirect(route('exam.page', ['exam_id' => $student_exam->id]));
     }
 
     /**

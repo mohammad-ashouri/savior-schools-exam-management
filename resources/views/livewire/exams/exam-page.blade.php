@@ -201,7 +201,8 @@
                                         $index = 0;
                                     @endphp
                                     @foreach($sub_question['options'] as $id => $option)
-                                        <label wire:key="op-key-{{ $id }}" class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                        <label wire:key="op-key-{{ $id }}"
+                                               class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                                             <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
                                                 <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
                                             </div>
@@ -262,6 +263,8 @@
             </div>
         </div>
     </div>
-    @vite(['resources/js/copy-blocker.js'])
+    @if(app()->environment('production'))
+        @vite(['resources/js/copy-blocker.js'])
+    @endif
 </div>
 
