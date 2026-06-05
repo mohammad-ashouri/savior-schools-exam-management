@@ -313,6 +313,10 @@
 
     <div style="margin-top: 24px;">
         @foreach($questions as $question)
+            @php
+                $letters = ['A', 'B', 'C', 'D'];
+                $index = 0;
+            @endphp
             @switch($question['question_type'])
                 @case('multiple_choice')
                     <div class="question-row">
@@ -326,7 +330,7 @@
                             <div class="q-options">
                                 @foreach($question['options'] as $option)
                                     <div class="option">
-                                        {{ $loop->iteration }}) {!! strip_tags($option, '<sup><sub><img>') !!}
+                                        {{ $letters[$index++] }}) {!! strip_tags($option, '<sup><sub><img>') !!}
                                     </div>
                                 @endforeach
                             </div>
@@ -343,6 +347,10 @@
 
                         <!-- Sub-questions (each behaves like a normal question-row) -->
                         @foreach($question['sub_questions'] as $sub_question)
+                            @php
+                                $letters = ['A', 'B', 'C', 'D'];
+                                $index = 0;
+                            @endphp
                             <div class="question-row">
                                 <div class="q-num">{{ $loop->iteration }}</div>
                                 <div class="q-text">
@@ -353,7 +361,7 @@
                                     <div class="q-options">
                                         @foreach($sub_question['options'] as $option)
                                             <div class="option">
-                                                {{ $loop->iteration }}) {!! strip_tags($option, '<sup><sub><img>') !!}
+                                                {{ $letters[$index++] }}) {!! strip_tags($option, '<sup><sub><img>') !!}
                                             </div>
                                         @endforeach
                                     </div>
