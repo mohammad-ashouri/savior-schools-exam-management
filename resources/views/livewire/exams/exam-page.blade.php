@@ -228,23 +228,23 @@
                         @if($show_previous_button)
                             <button
                                     wire:click="previousQuestion"
-                                    wire:target="previousQuestion"
+                                    wire:target="previousQuestion,setOption"
                                     wire:loading.remove
                                     class="px-6 py-3 bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                                 Previous
                             </button>
-                            <x-spinners.ring-resize target="previousQuestion" text="Wait..."/>
+                            <x-spinners.ring-resize target="previousQuestion,setOption" text="Wait..."/>
                         @endif
 
                         @if($show_next_button)
                             <button
                                     wire:click="nextQuestion"
-                                    wire:target="nextQuestion"
+                                    wire:target="nextQuestion,setOption"
                                     wire:loading.remove
                                     class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                                 Next
                             </button>
-                            <x-spinners.ring-resize target="nextQuestion" text="Wait..."/>
+                            <x-spinners.ring-resize target="nextQuestion,setOption" text="Wait..."/>
                         @endif
 
                         @if($show_end_button)
