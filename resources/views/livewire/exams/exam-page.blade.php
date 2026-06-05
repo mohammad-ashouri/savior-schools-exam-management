@@ -21,36 +21,36 @@
 
         <div
                 x-data="{
-        endTime: new Date('{{ $endTime }}').getTime(),
-        remaining: '00:00:00',
+                    endTime: new Date('{{ $endTime }}').getTime(),
+                    remaining: '00:00:00',
 
-        init() {
-            this.updateTimer();
+                    init() {
+                        this.updateTimer();
 
-            setInterval(() => {
-                this.updateTimer();
-            }, 1000);
-        },
+                        setInterval(() => {
+                            this.updateTimer();
+                        }, 1000);
+                    },
 
-        updateTimer() {
-            let distance = this.endTime - Date.now();
+                    updateTimer() {
+                        let distance = this.endTime - Date.now();
 
-            if (distance <= 0) {
-                this.remaining = '00:00:00';
-                $wire.dispatch('finish-exam');
-                return;
-            }
+                        if (distance <= 0) {
+                            this.remaining = '00:00:00';
+                            $wire.dispatch('finish-exam');
+                            return;
+                        }
 
-            let hours = Math.floor(distance / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        let hours = Math.floor(distance / (1000 * 60 * 60));
+                        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            this.remaining =
-                String(hours).padStart(2, '0') + ':' +
-                String(minutes).padStart(2, '0') + ':' +
-                String(seconds).padStart(2, '0');
-        }
-    }"
+                        this.remaining =
+                            String(hours).padStart(2, '0') + ':' +
+                            String(minutes).padStart(2, '0') + ':' +
+                            String(seconds).padStart(2, '0');
+                    }
+                }"
                 class="text-red-500 font-bold text-2xl"
         >
             ⏳ Time Remaining:
@@ -106,7 +106,7 @@
                             $status = $question['status'] ?? 'normal'; // normal, selected, answered, flagged, etc.
 
                             $isSelected = ($question['question_id'] == $selected_question_id);
-                            $hasAnswer = (ExamService::checkSelectedAnswerMultipleAnswer($question['question_id']) != null);
+                            $hasAnswer = (ExamService::checkSelectedAnswerMultipleChoice($question['question_id']) != null);
 
                             if ($isSelected && $hasAnswer) {
                                 $status = 'review';
@@ -162,7 +162,7 @@
                                                name="question_option"
                                                id="option_{{ $id }}"
                                                value="{{ $id }}"
-                                               @checked(ExamService::checkSelectedAnswerMultipleAnswer($this->selected_question_id)==$id)
+                                               @checked(ExamService::checkSelectedAnswerMultipleChoice($this->selected_question_id)==$id)
                                                wire:click="setOption({option_id: {{ $id }}})"
                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                         <label for="option_{{ $id }}"

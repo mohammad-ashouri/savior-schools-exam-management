@@ -84,6 +84,7 @@ class ExamPage extends Component
         $this->exam_date = ExamService::getExamDate($this->student_exam->classroomCourseInfo->id, $exam_status);
         $this->exam_time = ExamService::getExamTime($this->student_exam->classroomCourseInfo->id, $exam_status);
         $this->exam_duration = ExamService::getExamDuration($this->student_exam->classroomCourseInfo->id, $exam_status);
+
     }
 
     /**
@@ -169,7 +170,7 @@ class ExamPage extends Component
     {
         switch ($this->selected_question['question_type']) {
             case 'multiple_choice':
-                if (ExamService::checkSelectedAnswerMultipleAnswer($this->selected_question_id) == null) {
+                if (ExamService::checkSelectedAnswerMultipleChoice($this->selected_question_id) == null) {
                     $this->dispatch('open-modal', 'next-notif');
                     return;
                 }

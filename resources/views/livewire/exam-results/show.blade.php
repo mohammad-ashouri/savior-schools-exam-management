@@ -18,6 +18,26 @@
         </h2>
     </x-slot>
 
+    <div class="gap-y-1">
+        <div class=" mx-auto sm:px-6 lg:px-6">
+            <div class="bg-white mt-3  overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <x-cards.two_box_card
+                            title="Result"
+                            grid_cols="4"
+                            blue_side_label="All Questions Number"
+                            blue_side_value="{{ $this->student_exam->allQuestionsNumber() }}"
+                            green_side_label="Correct"
+                            green_side_value="{{ $this->student_exam->correctAnswers() }}"
+                            red_side_label="Wrong"
+                            red_side_value="{{ $this->student_exam->wrongAnswers() }}"
+                            yellow_side_label="Unanswered"
+                            yellow_side_value="{{ $this->student_exam->allQuestionsNumber()-$this->student_exam->correctAnswers()-$this->student_exam->wrongAnswers() }}"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="py-3 gap-y-1">
         <div class=" mx-auto sm:px-6 lg:px-6">
             <div class="bg-white mt-3  overflow-hidden shadow-sm sm:rounded-lg">
@@ -43,7 +63,7 @@
                                     @endphp
                                     @foreach($question->questionInfo->options->sortBy('id') as $option)
                                         @php
-                                            $selected=ExamService::checkSelectedAnswerMultipleAnswer($question->id)==$option->id;
+                                            $selected=ExamService::checkSelectedAnswerMultipleChoice($question->id)==$option->id;
                                         @endphp
                                         <label class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200
                                         @if($selected && $option->correct) bg-green-300 @endif

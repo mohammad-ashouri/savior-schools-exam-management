@@ -5,6 +5,7 @@ namespace App\Models\Exam;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\ClassroomStudent;
 use App\Models\User;
+use App\Service\ExamService;
 use App\Service\LogService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,13 +65,68 @@ class StudentExam extends Model
         return $this->hasMany(StudentExamQuestion::class, 'student_exam_id');
     }
 
-    public function adderInfo(): BelongsTo
+    public function allQuestionsNumber()
     {
-        return $this->belongsTo(User::class, 'adder');
+        $count = 0;
+        foreach ($this->questions as $question) {
+            switch ($question->questionInfo->question_type) {
+                case('multiple_choice'):
+                    $count++;
+                    break;
+                case('multipart_question'):
+                    $count += $question->questionInfo->subQuestions->count();
+                    break;
+            }
+        }
+        return $count;
     }
 
-    public function editorInfo(): BelongsTo
+    public function correctAnswers()
     {
-        return $this->belongsTo(User::class, 'editor');
+        $count = 0;
+        foreach ($this->questions as $question) {
+            switch ($question->questionInfo->question_type) {
+                case('multiple_choice'):
+                    $count = ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    break;
+                case('multipart_question'):
+                    foreach ($question->questionInfo->subQuestions as $sub_question) {
+                        $answered = $question->studentAnswer->where('sub_question_id', $sub_question->id)->first();
+                        if (!empty($answered)) {
+                            $count = $sub_question->options->where('correct', true)->first()->id == $answered->sub_question_option_id ? $count + 1 : $count;
+                        }
+                    }
+                    break;
+            }
+
+        }
+        return $count;
+    }
+
+    public function wrongAnswers()
+    {
+        $count = 0;
+        foreach ($this->questions as $question) {
+            switch ($question->questionInfo->question_type) {
+                case('multiple_choice'):
+                    $count = !ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    break;
+                case('multipart_question'):
+                    foreach ($question->questionInfo->subQuestions as $sub_question) {
+                        $answered = $question->studentAnswer->where('sub_question_id', $sub_question->id)->first();
+                        if (!empty($answered)) {
+                            $count = $sub_question->options->where('correct', true)->first()->id != $answered->sub_question_option_id ? $count + 1 : $count;
+                        }
+                    }
+                    break;
+            }
+
+        }
+        return $count;
+    }
+
+    public function unansweredQuestions()
+    {
+
     }
 }

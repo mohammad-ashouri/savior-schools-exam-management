@@ -279,9 +279,19 @@ class ExamService
      * @param $student_exam_question_id
      * @return mixed
      */
-    public static function checkSelectedAnswerMultipleAnswer($student_exam_question_id): mixed
+    public static function checkSelectedAnswerMultipleChoice($student_exam_question_id): mixed
     {
         return StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)->first()?->option_id;
+    }
+
+    /**
+     * Is option true or not in multiple choice question
+     * @param $option_id
+     * @return bool
+     */
+    public static function optionIsTrueInMultipleChoiceQuestion($option_id): bool
+    {
+        return Option::findOrFail($option_id)->correct;
     }
 
     /**
@@ -295,6 +305,17 @@ class ExamService
         return StudentExamAnswer::where('student_exam_question_id', $student_exam_question_id)
             ->where('sub_question_id', $sub_question_id)
             ->first()?->sub_question_option_id;
+    }
+
+    /**
+     * Is option true or not in multiple choice question
+     * @param $sub_question_id
+     * @param $option_id
+     * @return bool
+     */
+    public static function optionIsTrueInMultipartQuestion($sub_question_id, $option_id): bool
+    {
+        return SubQuestionOption::where('sub_question_id', $sub_question_id)->whereId($option_id)->first()->correct;
     }
 
     /**
@@ -321,7 +342,7 @@ class ExamService
         return StudentExam::where('classroom_course_id', $classroom_course_id)
             ->where('classroom_student_id', $classroom_student_id)
             ->where('term', $term)
-            ->where('status',1)
+            ->where('status', 1)
             ->exists();
     }
 
