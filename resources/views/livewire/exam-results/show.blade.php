@@ -41,7 +41,7 @@
                                         $letters = ['A', 'B', 'C', 'D'];
                                         $index = 0;
                                     @endphp
-                                    @foreach($question->questionInfo->options as $option)
+                                    @foreach($question->questionInfo->options->sortBy('id') as $option)
                                         @php
                                             $selected=ExamService::checkSelectedAnswerMultipleAnswer($question->id)==$option->id;
                                         @endphp
@@ -84,7 +84,7 @@
                                             $letters = ['A', 'B', 'C', 'D'];
                                             $index = 0;
                                         @endphp
-                                        @foreach($sub_question->options as $option)
+                                        @foreach($sub_question->options->sortBy('id') as $option)
                                             @php
                                                 $selected=ExamService::checkSelectedAnswerMultipartQuestion($question->id,$sub_question->id)==$option->id;
                                             @endphp
