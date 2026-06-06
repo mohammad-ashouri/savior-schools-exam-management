@@ -150,7 +150,7 @@
 
                             <div class="grid gap-3">
                                 @php
-                                    $letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+                                    $letters = ['A', 'B', 'C', 'D'];
                                     $index = 0;
                                 @endphp
                                 @foreach($this->selected_question['options'] as $id => $option)

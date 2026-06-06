@@ -48,7 +48,7 @@ class Index extends Component
                 ->get()
                 ->pluck('name', 'id')
                 ->toArray();
-        } elseif (auth()->user()->hasExactRoles(['Teacher'])) {
+        } elseif (auth()->user()->hasRole(['Teacher']) and !auth()->user()->hasRole(['Principal', 'Admissions Officer','Financial Manager']) ) {
             $my_academic_years = ClassroomCourse::where('teacher_id', auth()->user()->id)
                 ->get()
                 ->map(function ($item) {

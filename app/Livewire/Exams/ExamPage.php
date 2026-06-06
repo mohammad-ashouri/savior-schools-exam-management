@@ -101,6 +101,7 @@ class ExamPage extends Component
             'question_type' => $question->question_type,
             'title' => $question->title,
             'options' => $question->options()
+                ->orderBy('id')
                 ->get()
                 ->mapWithKeys(function ($option) {
                     return [$option->id => $option->option];
@@ -112,6 +113,7 @@ class ExamPage extends Component
                     'question_type' => $row->question_type,
                     'title' => $row->title,
                     'options' => $row->options()
+                        ->orderBy('id')
                         ->get()
                         ->mapWithKeys(function ($option) {
                             return [$option->id => $option->option];
