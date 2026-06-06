@@ -87,7 +87,9 @@ class StudentExam extends Model
         foreach ($this->questions as $question) {
             switch ($question->questionInfo->question_type) {
                 case('multiple_choice'):
-                    $count = ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    if (isset($question->studentAnswer->first()->option_id)) {
+                        $count = ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    }
                     break;
                 case('multipart_question'):
                     foreach ($question->questionInfo->subQuestions as $sub_question) {
@@ -109,7 +111,9 @@ class StudentExam extends Model
         foreach ($this->questions as $question) {
             switch ($question->questionInfo->question_type) {
                 case('multiple_choice'):
-                    $count = !ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    if (isset($question->studentAnswer->first()->option_id)) {
+                        $count = !ExamService::optionIsTrueInMultipleChoiceQuestion($question->studentAnswer->first()->option_id) ? $count + 1 : $count;
+                    }
                     break;
                 case('multipart_question'):
                     foreach ($question->questionInfo->subQuestions as $sub_question) {

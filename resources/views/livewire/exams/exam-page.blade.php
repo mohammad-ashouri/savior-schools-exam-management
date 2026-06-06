@@ -1,5 +1,5 @@
 @php use App\Service\ExamService; @endphp
-<div wire:poll.30s="checkExamStatus">
+<div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Exam: {{ $this->student_exam->classroomCourseInfo->courseInfo->name . " | " . $this->student_exam->classroomCourseInfo->courseInfo->gradeInfo->name }}
