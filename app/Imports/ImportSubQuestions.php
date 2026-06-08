@@ -10,10 +10,17 @@ use Maatwebsite\Excel\Concerns\ToModel;
 
 class ImportSubQuestions implements ToModel
 {
+    public int $question_id;
+
+    public function __construct($q_id)
+    {
+        $this->question_id = $q_id;
+    }
+
     public function model(array $row)
     {
         $sub_question = SubQuestion::create([
-            'question_id' => 8051,
+            'question_id' => $this->question_id,
             'question_type' => 'multiple_choice',
             'title' => $row[0],
             'adder' => 1

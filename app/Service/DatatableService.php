@@ -17,7 +17,7 @@ class DatatableService
         $datatable_component->setPrimaryKey('id');
         $datatable_component->setSearchPlaceholder('Search the entire table');
         $datatable_component->setSearchDebounce(1000);
-        $datatable_component->setDefaultSort('created_at', 'desc');
+        $datatable_component->setDefaultSort('id', 'desc');
     }
 
     public static function returnCatalogsColumnsJustName(): array

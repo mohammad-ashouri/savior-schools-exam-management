@@ -12,7 +12,9 @@ class ExcelController extends Controller
 {
     public function index()
     {
-        return view('temporary.excelimporter');
+        if (auth()->user()->hasRole('Super Admin')) {
+            return view('temporary.excelimporter');
+        }
     }
 
     public function ImportQuestions(Request $request)
@@ -29,10 +31,11 @@ class ExcelController extends Controller
     public function ImportSubQuestions(Request $request)
     {
         $file = $request->file('excel_file');
+        $q_id = $request->q_id;
 
         // Validate the uploaded file as needed
 
-        Excel::import(new ImportSubQuestions(), $file);
+        Excel::import(new ImportSubQuestions($q_id), $file);
 
         return redirect()->back()->with('success', 'داده‌ها با موفقیت وارد شدند.');
     }
