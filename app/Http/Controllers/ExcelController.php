@@ -23,7 +23,7 @@ class ExcelController extends Controller
 
         // Validate the uploaded file as needed
 
-        Excel::import(new ImportQuestions(), $file);
+        Excel::import(new ImportQuestions($request->classroom_course_id), $file);
 
         return redirect()->back()->with('success', 'داده‌ها با موفقیت وارد شدند.');
     }

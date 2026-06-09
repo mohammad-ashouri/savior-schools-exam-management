@@ -10,21 +10,19 @@ use Maatwebsite\Excel\Concerns\ToModel;
 
 class ImportQuestions implements ToModel
 {
-    /**
-     * @param Collection $collection
-     */
-    public function collection(Collection $collection)
-    {
-        //
+    public $classroom_course_id;
+
+    public function __construct($classroom_course_id){
+        $this->classroom_course_id = $classroom_course_id;
     }
 
     public function model(array $row)
     {
         if (empty($row[0])) dd($row[1]);
         $question = Question::create([
-            'classroom_course_id' => 247,
+            'classroom_course_id' => $this->classroom_course_id,
             'question_type' => 'multiple_choice',
-            'title' => $row[0],
+            'title' => trim($row[0]),
             'term' => 'second',
             'adder' => 1
         ]);

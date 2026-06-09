@@ -2,6 +2,7 @@ Questions <br/>
 <form action="{{ route('excel.importQuestions') }}" method="post" enctype="multipart/form-data">
     @csrf
     <input type="file" name="excel_file" required>
+    <input type="number" name="classroom_course_id" required>
     <button type="submit">آپلود فایل</button>
 </form>
 
