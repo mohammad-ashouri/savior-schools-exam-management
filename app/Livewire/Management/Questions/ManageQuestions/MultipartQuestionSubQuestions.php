@@ -5,6 +5,8 @@ namespace App\Livewire\Management\Questions\ManageQuestions;
 use App\Livewire\Forms\Management\QuestionForm;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\Question;
+use App\Models\Management\SubQuestion;
+use App\Models\Management\SubQuestionOption;
 use App\Service\ExamService;
 use App\Service\FileManagerService;
 use Illuminate\Contracts\View\Factory;
@@ -18,6 +20,23 @@ class MultipartQuestionSubQuestions extends Component
     public Question $question;
 
     public QuestionForm $question_form;
+
+    public $selected_question_id;
+
+    protected $listeners = [
+        'resetFields',
+        'set-selected-id' => 'setSelectedId',
+    ];
+
+    /**
+     * Set selected question id after dispatched event
+     * @param $id
+     * @return void
+     */
+    public function setSelectedId($id): void
+    {
+        $this->selected_question_id = $id;
+    }
 
     /**
      * Mount the component
@@ -66,6 +85,19 @@ class MultipartQuestionSubQuestions extends Component
         $this->dispatch('close-modal', 'create');
         $this->dispatch('show-notification', 'success-notification');
         $this->dispatch('refreshTable');
+    }
+
+    /**
+     * Delete question
+     * @return void
+     */
+    public function deleteQuestion(): void
+    {
+        SubQuestion::findOrFail($this->selected_question_id)->delete();
+        SubQuestionOption::where('sub_question_id', $this->selected_question_id)->delete();
+        $this->dispatch('refreshTable');
+        $this->dispatch('close-modal', 'confirm-delete');
+        $this->dispatch('show-notification', 'success-notification');
     }
 
     /**

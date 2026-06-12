@@ -9,6 +9,7 @@ use App\Livewire\Management\Courses as ManagementCoursesIndex;
 use App\Livewire\Management\Questions\Edit as EditQuestion;
 use App\Livewire\Management\Questions\Index as ManagementQuestionsIndex;
 use App\Livewire\Management\Questions\ManageQuestions\MultipartQuestionSubQuestions as ManageSubQuestionsMultipartQuestion;
+use App\Livewire\Management\Questions\ManageQuestions\MultipartQuestionSubQuestionsEdit as EditMultipartQuestion;
 use App\Livewire\Exams\Index as ExamIndex;
 use App\Livewire\ExamResults\Index as ExamResultsIndex;
 use App\Livewire\ExamResults\Show as ExamResultsShow;
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/courses/{classroom_id}/questions/{term}/{classroom_course_id}', ManagementQuestionsIndex::class)->name('management.courses.questions.index');
         Route::get('/subquestions/{question_id}', ManageSubQuestionsMultipartQuestion::class)->name('management.courses.questions.sub-questions');
         Route::get('/edit/{question_id}', EditQuestion::class)->name('management.courses.questions.edit');
+        Route::get('/edit-multipart-question/{question_id}', EditMultipartQuestion::class)->name('management.courses.questions.edit-multipart-question.edit');
     });
 
     Route::prefix('exams')->group(function () {

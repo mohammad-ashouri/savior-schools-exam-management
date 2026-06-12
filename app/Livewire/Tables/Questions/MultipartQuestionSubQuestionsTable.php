@@ -10,6 +10,7 @@ use App\Models\Management\Question;
 use App\Models\Management\SubQuestion;
 use App\Models\Management\SubQuestionOption;
 use App\Service\DatatableService;
+use App\Service\ExamService;
 use App\Service\TextService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,7 @@ class MultipartQuestionSubQuestionsTable extends DataTableComponent
     public function builder(): Builder
     {
         return SubQuestion::query()
-            ->with('options')
+            ->with(['options','questionInfo'])
             ->where('question_id', $this->question_id)
             ->orderBy('created_at', 'desc');
     }
@@ -89,11 +90,21 @@ class MultipartQuestionSubQuestionsTable extends DataTableComponent
             Column::make('Operations')
                 ->label(function ($row) {
                     $row_model = $this->model::where('id', $row->id)->first();
-                    $data = ['row' => $row, 'buttons' => null];
+                    $question=Question::find($row_model->question_id);
+                    $started = ExamService::checkExamStarted($question->classroom_course_id, $question->term);
+
+                    $data = [
+                        'row' => $row,
+                        'route' => route('management.courses.questions.edit-multipart-question.edit', $row->id),
+                        'buttons' => ['edit'],
+                    ];
+
+                    if (!$started) {
+                        $data['buttons'][] = 'delete';
+                    }
+
                     if ($row_model->question_type == "multipart_question") {
-                        $data['buttons'] = [
-                            'sub questions',
-                        ];
+                        $data['buttons'][] = 'sub questions';
                         $data['sub_questions_route_name'] =
                             route('management.courses.questions.sub-questions', [
                                 'question_id' => $row_model->id,

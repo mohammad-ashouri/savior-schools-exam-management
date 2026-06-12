@@ -2,13 +2,25 @@
 <div x-cloak
      x-data="{
     question_type:@entangle('question_form.question_type'),
-{{--    init() {--}}
-{{--        this.$watch('question_type', value => {--}}
-
-{{--        });--}}
-{{--    }--}}
 }"
 >
+    <x-modal name="confirm-delete" :show="$errors->isNotEmpty()" focusable>
+        <form wire:submit="deleteQuestion()" class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Want to delete this item?
+            </h2>
+            <div class="mt-6 flex justify-end">
+                <x-secondary-button x-on:click="$dispatch('close')">
+                    Close
+                </x-secondary-button>
+
+                <x-danger-button class="ms-3">
+                    Delete
+                </x-danger-button>
+            </div>
+        </form>
+    </x-modal>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Management | {{ $this->question->classroomCourseInfo->classroomInfo->academicYearInfo->name }}

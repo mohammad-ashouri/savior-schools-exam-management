@@ -46,6 +46,11 @@ class SubQuestion extends Model
         });
     }
 
+    public function questionInfo(): BelongsTo
+    {
+        return $this->belongsTo(Question::class,'sub_question_id','id');
+    }
+
     public function options()
     {
         return $this->hasMany(SubQuestionOption::class, 'sub_question_id');
