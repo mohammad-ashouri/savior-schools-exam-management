@@ -12,6 +12,7 @@ use App\Service\FileManagerService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -206,18 +207,6 @@ class Index extends Component
         $this->dispatch('clear-tinymce');
     }
 
-    /**
-     * Delete question
-     * @return void
-     */
-    public function deleteQuestion(): void
-    {
-        Question::findOrFail($this->selected_question_id)->delete();
-        Option::where('question_id', $this->selected_question_id)->delete();
-        $this->dispatch('refreshTable');
-        $this->dispatch('close-modal', 'confirm-delete');
-        $this->dispatch('show-notification', 'success-notification');
-    }
 
     /**
      * Render the component

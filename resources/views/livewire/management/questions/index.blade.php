@@ -2,12 +2,7 @@
 <div x-cloak
      x-data="{
     question_type:@entangle('question_form.question_type'),
-{{--    init() {--}}
-{{--        this.$watch('question_type', value => {--}}
-
-{{--        });--}}
-{{--    }--}}
-}"
+"
 >
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight">
@@ -50,14 +45,6 @@
                         <x-input-error class="mt-2" :messages="$errors->get('question_form.title')"/>
                     </div>
                     <div class="mt-4 space-y-1">
-                        {{--                        <x-input-label>Attachment Image</x-input-label>--}}
-                        {{--                        <x-filepond::upload wire:model="question_form.image"--}}
-                        {{--                                            :allowMultiple="false"--}}
-                        {{--                                            :instantUpload="true"--}}
-                        {{--                                            server-headers='@json(["X-CSRF-TOKEN" => csrf_token()])'--}}
-                        {{--                                            :chunkSize="2000000"--}}
-                        {{--                                            :accept="'image/jpg,image/png,image/jpeg,image.bmp'"/>--}}
-                        {{--                        <x-input-error class="mt-2" :messages="$errors->get('question_form.image')"/>--}}
 
                         <div x-transition x-show="question_type=='multiple_choice'"
                              class="grid grid-cols-1 gap-2 mt-4 space-y-1">
@@ -278,6 +265,7 @@
                     }
                 });
             });
+
         });
     </script>
 </div>

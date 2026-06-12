@@ -35,4 +35,5 @@
         <input type="hidden" id="option4-editor-input" wire:model="question_form.option4">
         <x-input-error class="mt-2" :messages="$errors->get('question_form.option4')"/>
     </div>
+
 </div>

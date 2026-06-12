@@ -61,6 +61,20 @@ class ExamService
     }
 
     /**
+     * Create question
+     * @param int $question_id
+     * @param string $title
+     * @return mixed
+     */
+    public static function editQuestion(int $question_id, string $title): mixed
+    {
+        return Question::findOrFail($question_id)->update([
+            'title' => $title,
+            'editor' => auth()->user()->id
+        ]);
+    }
+
+    /**
      * Create option for question
      * @param int $question_id
      * @param string $title
@@ -74,6 +88,22 @@ class ExamService
             'option' => $title,
             'correct' => $correct_answer,
             'adder' => auth()->user()->id,
+        ]);
+    }
+
+    /**
+     * Edit option for question
+     * @param int $option_id
+     * @param string $title
+     * @param bool $correct_answer
+     * @return mixed
+     */
+    public static function editOption(int $option_id, string $title, bool $correct_answer = false): mixed
+    {
+        return Option::findOrFail($option_id)->update([
+            'option' => $title,
+            'correct' => $correct_answer,
+            'editor' => auth()->user()->id,
         ]);
     }
 

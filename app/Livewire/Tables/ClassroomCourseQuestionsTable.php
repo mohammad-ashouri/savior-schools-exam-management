@@ -6,12 +6,15 @@ use App\Livewire\Management\Questions;
 use App\Models\Management\Classroom;
 use App\Models\Management\ClassroomCourse;
 use App\Models\Management\Course;
+use App\Models\Management\ExamInfo;
 use App\Models\Management\Option;
 use App\Models\Management\Question;
 use App\Service\DatatableService;
+use App\Service\ExamService;
 use App\Service\TextService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\On;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Facades\Excel;
@@ -39,17 +42,17 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
 
     protected $listeners = ['refreshTable' => '$refresh'];
 
-    public function mount($classroom_course_id,$term): void
+    public function mount($classroom_course_id, $term): void
     {
         $this->classroom_course_id = $classroom_course_id;
-        $this->term=$term;
+        $this->term = $term;
     }
 
     public function builder(): Builder
     {
         return Question::query()
             ->where('classroom_course_id', $this->classroom_course_id)
-            ->where('term',$this->term)
+            ->where('term', $this->term)
             ->with(['classroomCourseInfo'])
             ->orderBy('created_at', 'desc');
     }
@@ -95,7 +98,8 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
                     $row_model = $this->model::where('id', $row->id)->first();
                     $data = [
                         'row' => $row,
-                        'buttons' => ['delete'],
+                        'route' => route('management.courses.questions.edit', $row->id),
+                        'buttons' => ['edit', 'delete'],
                     ];
                     if ($row_model->question_type == "multipart_question") {
                         $data['buttons'] = [
@@ -150,8 +154,6 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
         $data = $query->get()->map(function ($item) {
             return [
                 'id' => $item->id,
-                'نام' => $item->name,
-                'شماره همراه' => $item->mobile,
                 'نقش' => $item->rolesNames,
             ];
         });
@@ -173,6 +175,6 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
             {
                 return array_keys($this->data[0]);
             }
-        }, 'مقادیر اولیه - مدیریت کاربران.xlsx');
+        }, '1.xlsx');
     }
 }

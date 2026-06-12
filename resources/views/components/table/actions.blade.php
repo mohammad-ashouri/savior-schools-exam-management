@@ -10,7 +10,7 @@
                 </x-secondary-button>
             @else
                 <x-secondary-button
-                        x-on:click="$dispatch('open-modal', 'edit'); $dispatch('get_data', { id: {{ $row->id }} } );"
+                        x-on:click="$dispatch('set-selected-id', [{{ $row->id }}]); $dispatch('get_data', { id: {{ $row->id }} } );"
                         title="Edit"
                 >Edit
                 </x-secondary-button>
