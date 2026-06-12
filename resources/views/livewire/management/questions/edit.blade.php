@@ -69,8 +69,8 @@
                     </div>
                     <div class="flex items-center justify-end gap-2 p-4">
                         <x-secondary-button type="button"
-                                            x-on:click="$dispatch('close-modal','edit');$wire.set('question_form.question_type', null);">
-                            Close
+                                            wire:click="redirectBack">
+                            Back
                         </x-secondary-button>
                         <x-primary-button wire:loading.remove type="submit">Save</x-primary-button>
                         <span wire:loading class="text-gray-500">Processing...</span>

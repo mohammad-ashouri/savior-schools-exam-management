@@ -18,7 +18,11 @@ class Edit extends Component
 
     public QuestionForm $question_form;
 
-    public function getQuestionData()
+    /**
+     * Get question data
+     * @return void
+     */
+    private function getQuestionData(): void
     {
         $this->question_form->question_type = $this->question->question_type;
         $this->question_form->title = $this->question->title;
@@ -48,7 +52,11 @@ class Edit extends Component
         $this->dispatch('load-tinymce-content', data: $data);
     }
 
-    public function editQuestion()
+    /**
+     * Edit question
+     * @return void
+     */
+    public function editQuestion(): void
     {
         $this->question_form->validate();
 
@@ -74,6 +82,15 @@ class Edit extends Component
                 break;
         }
 
+        $this->redirectBack();
+    }
+
+    /**
+     * Redirect to prev page
+     * @return void
+     */
+    public function redirectBack(): void
+    {
         $this->redirect(route('management.courses.questions.index', [
             'classroom_id' => $this->question->classroomCourseInfo->classroom_id,
             'classroom_course_id' => $this->question->classroom_course_id,
@@ -81,7 +98,12 @@ class Edit extends Component
         ]), navigate: true);
     }
 
-    public function mount($question_id)
+    /**
+     * Mount the component
+     * @param $question_id
+     * @return void
+     */
+    public function mount($question_id): void
     {
         $this->question = Question::findOrFail($question_id);
         $this->getQuestionData();
@@ -93,6 +115,10 @@ class Edit extends Component
      */
     public function render(): View|Application|Factory|\Illuminate\View\View
     {
+        if (!auth()->user()->can("exam-management.manage-exams")) {
+            abort(403, 'Access denied.');
+        }
+
         $this->question_form->question_types = ExamService::getQuestionTypes();
 
         return view('livewire.management.questions.edit');
