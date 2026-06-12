@@ -1,4 +1,35 @@
 @php use App\Service\ExamService; @endphp
+@push('styles')
+    <style>
+        .mini-spinner {
+            transform-origin: center;
+            animation: mini-spinner-rotate 2s linear infinite;
+        }
+        .mini-spinner circle {
+            stroke-linecap: round;
+            animation: mini-spinner-dash 1.5s ease-in-out infinite;
+        }
+        @keyframes mini-spinner-rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes mini-spinner-dash {
+            0% {
+                stroke-dasharray: 0 150;
+                stroke-dashoffset: 0;
+            }
+            47.5% {
+                stroke-dasharray: 42 150;
+                stroke-dashoffset: -16;
+            }
+            95%, 100% {
+                stroke-dasharray: 42 150;
+                stroke-dashoffset: -59;
+            }
+        }
+    </style>
+@endpush
 <div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
@@ -160,7 +191,7 @@
                                     $index = 0;
                                 @endphp
                                 @foreach($this->selected_question['options'] as $id => $option)
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                    <label wire:key="option-{{ $id }}" class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                                         <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
                                             <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
                                         </div>
@@ -170,6 +201,8 @@
                                                value="{{ $id }}"
                                                @checked(ExamService::checkSelectedAnswerMultipleChoice($this->selected_question_id)==$id)
                                                wire:click="setOption({option_id: {{ $id }}})"
+                                               wire:target="setOption,nextQuestion,previousQuestion"
+                                               wire:loading.attr="disabled"
                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                         <label for="option_{{ $id }}"
                                                class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer flex-1">
@@ -207,7 +240,7 @@
                                         $index = 0;
                                     @endphp
                                     @foreach($sub_question['options'] as $id => $option)
-                                        <label wire:key="op-key-{{ $id }}"
+                                        <label wire:key="sub-op-key-{{ $id }}"
                                                class="flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                                             <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center mr-3">
                                                 <span class="text-sm font-bold text-gray-600 dark:text-gray-400">{{ $letters[$index++] }}</span>
@@ -218,6 +251,7 @@
                                                    value="{{ $id }}"
                                                    wire:loading.remove
                                                    wire:loading.attr="disabled"
+                                                   wire:target="setOption,nextQuestion,previousQuestion"
                                                    @checked(ExamService::checkSelectedAnswerMultipartQuestion($this->selected_question_id,$sub_question['id'])==$id)
                                                    wire:click="setOption(null, {{ $sub_question['id'] }},{{ $id }})"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
@@ -236,33 +270,44 @@
                             <button
                                     wire:click="previousQuestion"
                                     wire:target="previousQuestion,setOption"
-                                    wire:loading.remove
-                                    class="px-6 py-3 bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                                Previous
+                                    wire:loading.attr="disabled"
+                                    class="px-6 py-3 bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span wire:loading.remove wire:target="previousQuestion,setOption">Previous</span>
+                                <span wire:loading wire:target="previousQuestion,setOption" class="flex items-center gap-2">
+                                    <svg width="16" height="16" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <g class="mini-spinner">
+                                            <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+                                        </g>
+                                    </svg>
+                                    <span class="text-sm">Wait...</span>
+                                </span>
                             </button>
-                            <x-spinners.ring-resize target="previousQuestion,setOption" text="Wait..."/>
                         @endif
 
                         @if($show_next_button)
                             <button
                                     wire:click="nextQuestion"
                                     wire:target="nextQuestion,setOption"
-                                    wire:loading.remove
-                                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                                Next
+                                    wire:loading.attr="disabled"
+                                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span wire:loading.remove wire:target="nextQuestion,setOption">Next</span>
+                                <span wire:loading wire:target="nextQuestion,setOption" class="flex items-center gap-2">
+                                    <span class="text-sm">Wait...</span>
+                                </span>
                             </button>
-                            <x-spinners.ring-resize target="nextQuestion,setOption" text="Wait..."/>
                         @endif
 
                         @if($show_end_button)
                             <button
                                     wire:click="$dispatch('open-modal','finish-exam')"
-                                    wire:loading.remove
                                     wire:target="setOption"
-                                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                                Finish!
+                                    wire:loading.attr="disabled"
+                                    class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span wire:loading.remove wire:target="setOption">Finish!</span>
+                                <span wire:loading wire:target="setOption" class="flex items-center gap-2">
+                                    <span class="text-sm">Wait...</span>
+                                </span>
                             </button>
-                            <x-spinners.ring-resize text="Wait..."/>
                         @endif
                     </div>
                 </div>
