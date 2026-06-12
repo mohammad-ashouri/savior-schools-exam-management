@@ -27,6 +27,8 @@ class ExamPage extends Component
 
     public $exam_duration;
 
+    public $remaining_time_ms;
+
     public $questions = [];
 
     public $selected_question_id = null;
@@ -85,6 +87,13 @@ class ExamPage extends Component
         $this->exam_time = ExamService::getExamTime($this->student_exam->classroomCourseInfo->id, $exam_status);
         $this->exam_duration = ExamService::getExamDuration($this->student_exam->classroomCourseInfo->id, $exam_status);
 
+        $duration = (int) $this->exam_duration;
+
+        $startTime = \Carbon\Carbon::parse($this->exam_date . ' ' . $this->exam_time);
+        $endTime = (clone $startTime)->addMinutes($duration);
+
+        $now = now();
+        $this->remaining_time_ms = $now->isBefore($endTime) ? $now->diffInMilliseconds($endTime) : 0;
     }
 
     /**

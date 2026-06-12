@@ -10,30 +10,36 @@
         <h2 class="font-semibold text-xl text-gray-100 dark:text-gray-200 leading-tight mb-2">
             Exam Date And Time: {{ $this->exam_date . " - " . $this->exam_time . " - " . $this->exam_duration }} Minutes
         </h2>
-        @php
-            $duration = (int) $this->exam_duration;
-
-            $endTime = \Carbon\Carbon::createFromFormat(
-                'Y-m-d H:i',
-                $this->exam_date . ' ' . $this->exam_time
-            )->addMinutes($duration)->format('Y-m-d H:i:s');
-        @endphp
-
         <div
                 x-data="{
-                    endTime: new Date('{{ $endTime }}').getTime(),
+                    remainingMs: {{ $this->remaining_time_ms }},
                     remaining: '00:00:00',
+                    intervalId: null,
 
                     init() {
                         this.updateTimer();
 
-                        setInterval(() => {
+                        this.intervalId = setInterval(() => {
+                            if (this.remainingMs <= 0) {
+                                clearInterval(this.intervalId);
+                                return;
+                            }
+                            this.remainingMs -= 1000;
                             this.updateTimer();
                         }, 1000);
+
+                        // Listen for Livewire updates to get fresh server time
+                        Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+                            succeed(({ snapshot, effect }) => {
+                                // Get the latest remaining_time_ms from the component
+                                this.remainingMs = @this.get('remaining_time_ms');
+                                this.updateTimer();
+                            });
+                        });
                     },
 
                     updateTimer() {
-                        let distance = this.endTime - Date.now();
+                        let distance = this.remainingMs;
 
                         if (distance <= 0) {
                             this.remaining = '00:00:00';
