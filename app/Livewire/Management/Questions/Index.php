@@ -108,6 +108,7 @@ class Index extends Component
         ]);
 
         $this->dispatch('show-notification', 'success-notification');
+        $this->dispatch('refreshTable');
     }
 
     /**
@@ -127,6 +128,7 @@ class Index extends Component
         ]);
 
         $this->dispatch('show-notification', 'success-notification');
+        $this->dispatch('refreshTable');
     }
 
     /**
@@ -146,6 +148,7 @@ class Index extends Component
         ]);
 
         $this->dispatch('show-notification', 'success-notification');
+        $this->dispatch('refreshTable');
     }
 
     /**
@@ -165,6 +168,7 @@ class Index extends Component
         ]);
 
         $this->dispatch('show-notification', 'success-notification');
+        $this->dispatch('refreshTable');
     }
 
     /**
@@ -207,6 +211,18 @@ class Index extends Component
         $this->dispatch('clear-tinymce');
     }
 
+    /**
+     * Delete question
+     * @return void
+     */
+    public function deleteQuestion(): void
+    {
+        Question::findOrFail($this->selected_question_id)->delete();
+        Option::where('question_id', $this->selected_question_id)->delete();
+        $this->dispatch('refreshTable');
+        $this->dispatch('close-modal', 'confirm-delete');
+        $this->dispatch('show-notification', 'success-notification');
+    }
 
     /**
      * Render the component

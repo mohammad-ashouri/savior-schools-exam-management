@@ -96,15 +96,19 @@ class ClassroomCourseQuestionsTable extends DataTableComponent
             Column::make('Operations')
                 ->label(function ($row) {
                     $row_model = $this->model::where('id', $row->id)->first();
+                    $started = ExamService::checkExamStarted($row_model->classroom_course_id, $row_model->term);
                     $data = [
                         'row' => $row,
                         'route' => route('management.courses.questions.edit', $row->id),
-                        'buttons' => ['edit', 'delete'],
+                        'buttons' => ['edit'],
                     ];
+
+                    if (!$started) {
+                        $data['buttons'][] = 'delete';
+                    }
+
                     if ($row_model->question_type == "multipart_question") {
-                        $data['buttons'] = [
-                            'sub questions',
-                        ];
+                        $data['buttons'][] = 'sub questions';
                         $data['sub_questions_route_name'] =
                             route('management.courses.questions.sub-questions', [
                                 'question_id' => $row_model->id,

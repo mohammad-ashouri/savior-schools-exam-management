@@ -376,4 +376,23 @@ class ExamService
             ->exists();
     }
 
+    /**
+     * Check if exam has started
+     * @param $classroom_course_id
+     * @param $term
+     * @return bool
+     */
+    public static function checkExamStarted($classroom_course_id, $term): bool
+    {
+        $date = self::getExamDate($classroom_course_id, $term);
+        $time = self::getExamTime($classroom_course_id, $term);
+
+        if (empty($date) || empty($time)) {
+            return false;
+        }
+
+        $start = Carbon::parse($date . ' ' . $time);
+
+        return Carbon::now()->greaterThanOrEqualTo($start);
+    }
 }
