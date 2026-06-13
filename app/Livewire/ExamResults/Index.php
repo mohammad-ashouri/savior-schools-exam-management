@@ -87,7 +87,7 @@ class Index extends Component
     {
         $classroom = Classroom::query()->where('academic_year_id', $this->academic_year);
 
-        if (auth()->user()->hasExactRoles(['Teacher'])) {
+        if (auth()->user()->hasRole(['Teacher']) and !auth()->user()->hasRole(['Super Admin','Principal','Admissions Officer','Financial Manager'])) {
             $classroom->whereHas('courses', function ($query) {
                 $query->where('teacher_id', auth()->user()->id);
             });
@@ -114,7 +114,7 @@ class Index extends Component
     {
         $classroom_courses = ClassroomCourse::where('classroom_id', $this->classroom_id);
 
-        if (auth()->user()->hasExactRoles(['Teacher'])) {
+        if (auth()->user()->hasRole(['Teacher']) and !auth()->user()->hasRole(['Super Admin','Principal','Admissions Officer','Financial Manager'])) {
             $classroom_courses->where('teacher_id', auth()->user()->id);
         }
 
